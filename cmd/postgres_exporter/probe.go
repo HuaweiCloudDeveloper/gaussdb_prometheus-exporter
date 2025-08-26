@@ -18,8 +18,8 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/prometheus-community/postgres_exporter/collector"
-	"github.com/prometheus-community/postgres_exporter/config"
+	"github.com/HuaweiCloudDeveloper/gaussdb_prometheus-exporter/collector"
+	"github.com/HuaweiCloudDeveloper/gaussdb_prometheus-exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )

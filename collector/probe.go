@@ -18,7 +18,7 @@ import (
 	"log/slog"
 	"sync"
 
-	"github.com/prometheus-community/postgres_exporter/config"
+	"github.com/HuaweiCloudDeveloper/gaussdb_prometheus-exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

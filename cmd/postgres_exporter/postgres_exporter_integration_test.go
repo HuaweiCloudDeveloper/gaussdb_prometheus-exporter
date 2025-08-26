@@ -25,7 +25,8 @@ import (
 	"strings"
 	"testing"
 
-	_ "github.com/lib/pq"
+	//_ "github.com/lib/pq"
+	_ "github.com/HuaweiCloudDeveloper/gaussdb-go/stdlib"
 	"github.com/prometheus/client_golang/prometheus"
 	. "gopkg.in/check.v1"
 )

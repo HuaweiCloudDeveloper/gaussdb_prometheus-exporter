@@ -19,7 +19,7 @@ jobs:
     - run: GOHOSTARCH=386 GOARCH=386 make test
     - run: make
     - prometheus/store_artifact:
-        file: postgres_exporter
+        file: gaussdb_exporter
 
   integration:
     docker:

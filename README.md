@@ -358,7 +358,7 @@ BEGIN
   IF NOT EXISTS (
           SELECT                       -- SELECT list can stay empty for this
           FROM   pg_catalog.pg_user
-          WHERE  usename = 'postgres_exporter') THEN
+          WHERE  usename = 'gaussdb_exporter') THEN
     CREATE USER postgres_exporter;
   END IF;
 END;
@@ -372,7 +372,7 @@ ALTER USER postgres_exporter SET SEARCH_PATH TO postgres_exporter,pg_catalog;
 
 -- If deploying as non-superuser (for example in AWS RDS), uncomment the GRANT
 -- line below and replace <MASTER_USER> with your root user.
--- GRANT postgres_exporter TO <MASTER_USER>;
+-- GRANT gaussdb_exporter TO <MASTER_USER>;
 
 GRANT CONNECT ON DATABASE postgres TO postgres_exporter;
 ```

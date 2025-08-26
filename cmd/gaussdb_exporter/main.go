@@ -37,7 +37,7 @@ var (
 		Config: &config.Config{},
 	}
 
-	configFile             = kingpin.Flag("config.file", "Postgres exporter configuration file.").Default("postgres_exporter.yml").String()
+	configFile             = kingpin.Flag("config.file", "Postgres exporter configuration file.").Default("gaussdb_exporter.yml").String()
 	webConfig              = kingpinflag.AddFlags(kingpin.CommandLine, ":9187")
 	metricsPath            = kingpin.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").Envar("PG_EXPORTER_WEB_TELEMETRY_PATH").String()
 	disableDefaultMetrics  = kingpin.Flag("disable-default-metrics", "Do not include default metrics.").Default("false").Envar("PG_EXPORTER_DISABLE_DEFAULT_METRICS").Bool()
@@ -59,7 +59,7 @@ const (
 	// Subsystems.
 	exporter = "exporter"
 	// The name of the exporter.
-	exporterName = "postgres_exporter"
+	exporterName = "gaussdb_exporter"
 	// Metric label used for static string data thats handy to send to Prometheus
 	// e.g. version
 	staticLabelName = "static"

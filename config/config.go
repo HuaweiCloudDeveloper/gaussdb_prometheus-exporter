@@ -26,13 +26,13 @@ import (
 
 var (
 	configReloadSuccess = promauto.NewGauge(prometheus.GaugeOpts{
-		Namespace: "postgres_exporter",
+		Namespace: "gaussdb_exporter",
 		Name:      "config_last_reload_successful",
 		Help:      "Postgres exporter config loaded successfully.",
 	})
 
 	configReloadSeconds = promauto.NewGauge(prometheus.GaugeOpts{
-		Namespace: "postgres_exporter",
+		Namespace: "gaussdb_exporter",
 		Name:      "config_last_reload_success_timestamp_seconds",
 		Help:      "Timestamp of the last successful configuration reload.",
 	})

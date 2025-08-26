@@ -1,27 +1,27 @@
 #!/bin/sh
 
-# PROVIDE: postgres_exporter
+# PROVIDE: gaussdb_exporter
 # REQUIRE: LOGIN
 # KEYWORD: shutdown
 #
-# rc-script for postgres_exporter
+# rc-script for gaussdb_exporter
 #
 #
 # Add the following lines to /etc/rc.conf.local or /etc/rc.conf
 # to enable this service:
 #
 # postgres_exporter_enable (bool):          Set to NO by default.
-#               Set it to YES to enable postgres_exporter.
-# postgres_exporter_user (string):          Set user that postgres_exporter will run under
+#               Set it to YES to enable gaussdb_exporter.
+# postgres_exporter_user (string):          Set user that gaussdb_exporter will run under
 #               Default is "nobody".
-# postgres_exporter_group (string):         Set group that postgres_exporter will run under
+# postgres_exporter_group (string):         Set group that gaussdb_exporter will run under
 #               Default is "nobody".
-# postgres_exporter_args (string):          Set extra arguments to pass to postgres_exporter
+# postgres_exporter_args (string):          Set extra arguments to pass to gaussdb_exporter
 #               Default is "".
 # postgres_exporter_listen_address (string):Set ip:port to listen on for web interface and telemetry.
 #		Defaults to ":9187"
 # postgres_exporter_pg_user (string):	    Set the Postgres database user
-#		Defaults to "postgres_exporter"
+#		Defaults to "gaussdb_exporter"
 # postgres_exporter_pg_pass (string):	    Set the Postgres datase password
 #		Default is empty
 # postgres_exporter_pg_host (string):	    Set the Postgres database server
@@ -30,12 +30,12 @@
 #		Defaults to "5432"
 
 # Add extra arguments via "postgres_exporter_args"
-# (see $ postgres_exporter --help)
+# (see $ gaussdb_exporter --help)
 
 
 . /etc/rc.subr
 
-name=postgres_exporter
+name=gaussdb_exporter
 rcvar=postgres_exporter_enable
 
 load_rc_config $name
@@ -53,7 +53,7 @@ load_rc_config $name
 postgres_exporter_data_source_name="postgresql://${postgres_exporter_pg_user}:${postgres_exporter_pg_pass}@${postgres_exporter_pg_host}:${postgres_exporter_pg_port}/postgres?sslmode=disable"
 
 
-pidfile=/var/run/postgres_exporter.pid
+pidfile=/var/run/gaussdb_exporter.pid
 command="/usr/sbin/daemon"
 procname="/usr/local/bin/postgres_exporter"
 command_args="-f -p ${pidfile} -T ${name} \

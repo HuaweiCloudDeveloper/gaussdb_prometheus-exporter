@@ -76,9 +76,9 @@ type MappingOptions struct {
 // Mapping represents a set of MappingOptions
 type Mapping map[string]MappingOptions
 
-// Regex used to get the "short-version" from the postgres version field.
-var versionRegex = regexp.MustCompile(`^\w+ ((\d+)(\.\d+)?(\.\d+)?)`)
-var lowestSupportedVersion = semver.MustParse("9.1.0")
+// Regex used to get the "short-version" from the GaussDB version field.
+var versionRegex = regexp.MustCompile(`GaussDB Kernel (\d+\.\d+\.\d+)`)
+var lowestSupportedVersion = semver.MustParse("505.0.0")
 
 // Parses the version of postgres into the short version string we can use to
 // match behaviors.
@@ -88,7 +88,7 @@ func parseVersion(versionString string) (semver.Version, error) {
 		return semver.ParseTolerant(submatches[1])
 	}
 	return semver.Version{},
-		errors.New(fmt.Sprintln("Could not find a postgres version in string:", versionString))
+		errors.New(fmt.Sprintln("Could not find a GaussDB version in string:", versionString))
 }
 
 // ColumnMapping is the user-friendly representation of a prometheus descriptor map
@@ -583,8 +583,8 @@ func newDesc(subsystem, name, help string, labels prometheus.Labels) *prometheus
 	)
 }
 
-func checkPostgresVersion(db *sql.DB, server string) (semver.Version, string, error) {
-	logger.Debug("Querying PostgreSQL version", "server", server)
+func checkGaussDBVersion(db *sql.DB, server string) (semver.Version, string, error) {
+	logger.Debug("Querying GaussDB version", "server", server)
 	versionRow := db.QueryRow("SELECT version();")
 	var versionString string
 	err := versionRow.Scan(&versionString)
@@ -601,13 +601,13 @@ func checkPostgresVersion(db *sql.DB, server string) (semver.Version, string, er
 
 // Check and update the exporters query maps if the version has changed.
 func (e *Exporter) checkMapVersions(ch chan<- prometheus.Metric, server *Server) error {
-	semanticVersion, versionString, err := checkPostgresVersion(server.db, server.String())
+	semanticVersion, versionString, err := checkGaussDBVersion(server.db, server.String())
 	if err != nil {
 		return fmt.Errorf("Error fetching version string on %q: %v", server, err)
 	}
 
 	if !e.disableDefaultMetrics && semanticVersion.LT(lowestSupportedVersion) {
-		logger.Warn("PostgreSQL version is lower than our lowest supported version", "server", server, "version", semanticVersion, "lowest_supported_version", lowestSupportedVersion)
+		logger.Warn("GaussDB version is lower than our lowest supported version", "server", server, "version", semanticVersion, "lowest_supported_version", lowestSupportedVersion)
 	}
 
 	// Check if semantic version changed and recalculate maps if needed.

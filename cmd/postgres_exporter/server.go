@@ -19,6 +19,7 @@ import (
 	"sync"
 	"time"
 
+	_ "github.com/HuaweiCloudDeveloper/gaussdb-go/stdlib"
 	"github.com/blang/semver/v4"
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -63,14 +64,22 @@ func NewServer(dsn string, opts ...ServerOpt) (*Server, error) {
 		return nil, err
 	}
 
-	db, err := sql.Open("postgres", dsn)
+	db, err := sql.Open("gaussdb", dsn)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Unable to create a GaussDB connection: %w", err)
 	}
+
 	db.SetMaxOpenConns(1)
 	db.SetMaxIdleConns(1)
+	db.SetConnMaxLifetime(0)
 
-	logger.Info("Established new database connection", "fingerprint", fingerprint)
+	// 验证连接是否有效
+	if err := db.Ping(); err != nil {
+		db.Close()
+		return nil, fmt.Errorf("GaussDB connection test failed: %w", err)
+	}
+
+	logger.Info("A new GaussDB connection has been established", "fingerprint", fingerprint)
 
 	s := &Server{
 		db:     db,

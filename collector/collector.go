@@ -46,13 +46,13 @@ const (
 var (
 	scrapeDurationDesc = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "scrape", "collector_duration_seconds"),
-		"postgres_exporter: Duration of a collector scrape.",
+		"gaussdb_exporter: Duration of a collector scrape.",
 		[]string{"collector"},
 		nil,
 	)
 	scrapeSuccessDesc = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "scrape", "collector_success"),
-		"postgres_exporter: Whether a collector succeeded.",
+		"gaussdb_exporter: Whether a collector succeeded.",
 		[]string{"collector"},
 		nil,
 	)

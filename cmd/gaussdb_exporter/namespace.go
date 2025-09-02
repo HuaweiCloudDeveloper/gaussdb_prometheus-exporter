@@ -17,10 +17,10 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"github.com/HuaweiCloudDeveloper/gaussdb_prometheus-exporter/tool"
 	"time"
 
 	"github.com/blang/semver/v4"
-	"github.com/lib/pq"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -100,7 +100,7 @@ func queryNamespaceMapping(server *Server, namespace string, mapping MetricMapNa
 
 				if metricMapping.histogram {
 					var keys []float64
-					err = pq.Array(&keys).Scan(columnData[idx])
+					err = tool.Array(&keys).Scan(columnData[idx])
 					if err != nil {
 						return []prometheus.Metric{}, []error{}, errors.New(fmt.Sprintln("Error retrieving", columnName, "buckets:", namespace, err))
 					}
@@ -111,7 +111,7 @@ func queryNamespaceMapping(server *Server, namespace string, mapping MetricMapNa
 						nonfatalErrors = append(nonfatalErrors, errors.New(fmt.Sprintln("Missing column: ", namespace, columnName+"_bucket")))
 						continue
 					}
-					err = pq.Array(&values).Scan(columnData[valuesIdx])
+					err = tool.Array(&values).Scan(columnData[valuesIdx])
 					if err != nil {
 						return []prometheus.Metric{}, []error{}, errors.New(fmt.Sprintln("Error retrieving", columnName, "bucket values:", namespace, err))
 					}

@@ -35,7 +35,7 @@ func (e *Exporter) discoverDatabaseDSNs() []string {
 		var dsnURI *url.URL
 		var dsnConnstring string
 
-		if strings.HasPrefix(dsn, "postgresql://") || strings.HasPrefix(dsn, "postgres://") {
+		if strings.HasPrefix(dsn, "gaussdb://") {
 			var err error
 			dsnURI, err = url.Parse(dsn)
 			if err != nil {
@@ -167,7 +167,7 @@ func getDataSources() ([]string, error) {
 		return []string{}, nil
 	}
 
-	dsn = "postgresql://" + ui + "@" + uri
+	dsn = "gaussdb://" + ui + "@" + uri
 
 	return []string{dsn}, nil
 }

@@ -34,7 +34,7 @@ func newInstance(dsn string) (*instance, error) {
 
 	// "Create" a database handle to verify the DSN provided is valid.
 	// Open is not guaranteed to create a connection.
-	db, err := sql.Open("postgres", dsn)
+	db, err := sql.Open("gaussdb", dsn)
 	if err != nil {
 		return nil, err
 	}
@@ -51,17 +51,18 @@ func (i *instance) copy() *instance {
 }
 
 func (i *instance) setup() error {
-	db, err := sql.Open("postgres", i.dsn)
+	db, err := sql.Open("gaussdb", i.dsn)
 	if err != nil {
 		return err
 	}
 	db.SetMaxOpenConns(1)
 	db.SetMaxIdleConns(1)
+	db.SetConnMaxLifetime(0)
 	i.db = db
 
 	version, err := queryVersion(i.db)
 	if err != nil {
-		return fmt.Errorf("error querying postgresql version: %w", err)
+		return fmt.Errorf("error querying gaussdb version: %w", err)
 	} else {
 		i.version = version
 	}
@@ -78,8 +79,8 @@ func (i *instance) Close() error {
 
 // Regex used to get the "short-version" from the postgres version field.
 // The result of SELECT version() is something like "PostgreSQL 9.6.2 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 6.2.1 20160830, 64-bit"
-var versionRegex = regexp.MustCompile(`^\w+ ((\d+)(\.\d+)?(\.\d+)?)`)
-var serverVersionRegex = regexp.MustCompile(`^((\d+)(\.\d+)?(\.\d+)?)`)
+var versionRegex = regexp.MustCompile(`GaussDB Kernel (\d+\.\d+\.\d+)`)
+var serverVersionRegex = regexp.MustCompile(`^(\d+\.\d+\.\d+)`)
 
 func queryVersion(db *sql.DB) (semver.Version, error) {
 	var version string

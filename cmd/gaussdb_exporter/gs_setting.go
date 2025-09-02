@@ -14,6 +14,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"math"
 	"strconv"
@@ -61,14 +62,15 @@ func querySettings(ch chan<- prometheus.Metric, server *Server) error {
 // pgSetting is represents a PostgreSQL runtime variable as returned by the
 // pg_settings view.
 type pgSetting struct {
-	name, setting, unit, shortDesc, vartype string
+	name, setting /*unit,*/, shortDesc, vartype string
+	unit                                        sql.NullString
 }
 
 func (s *pgSetting) metric(labels prometheus.Labels) prometheus.Metric {
 	var (
 		err       error
 		name      = strings.ReplaceAll(strings.ReplaceAll(s.name, ".", "_"), "-", "_")
-		unit      = s.unit // nolint: ineffassign
+		unit      = s.unit.String // nolint: ineffassign
 		shortDesc = fmt.Sprintf("Server Parameter: %s", s.name)
 		subsystem = "settings"
 		val       float64
@@ -123,7 +125,7 @@ func (s *pgSetting) normaliseUnit() (val float64, unit string, err error) {
 	}
 
 	// Units defined in: https://www.postgresql.org/docs/current/static/config-setting.html
-	switch s.unit {
+	switch s.unit.String {
 	case "":
 		return
 	case "ms", "s", "min", "h", "d":
@@ -131,7 +133,7 @@ func (s *pgSetting) normaliseUnit() (val float64, unit string, err error) {
 	case "B", "kB", "MB", "GB", "TB", "1kB", "2kB", "4kB", "8kB", "16kB", "32kB", "64kB", "16MB", "32MB", "64MB":
 		unit = "bytes"
 	default:
-		err = fmt.Errorf("unknown unit for runtime variable: %q", s.unit)
+		err = fmt.Errorf("unknown unit for runtime variable: %q", s.unit.String)
 		return
 	}
 
@@ -140,7 +142,7 @@ func (s *pgSetting) normaliseUnit() (val float64, unit string, err error) {
 		return
 	}
 
-	switch s.unit {
+	switch s.unit.String {
 	case "ms":
 		val /= 1000
 	case "min":

@@ -18,7 +18,7 @@ import (
 	"database/sql"
 	"log/slog"
 
-	"github.com/lib/pq"
+	"github.com/HuaweiCloudDeveloper/gaussdb_prometheus-exporter/tool"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -92,7 +92,7 @@ func (PGProcessIdleCollector) Update(ctx context.Context, instance *instance, ch
 	var seconds []float64
 	var secondsBucket []int64
 
-	err := row.Scan(&state, &applicationName, &secondsSum, &secondsCount, pq.Array(&seconds), pq.Array(&secondsBucket))
+	err := row.Scan(&state, &applicationName, &secondsSum, &secondsCount, tool.Array(&seconds), tool.Array(&secondsBucket))
 	if err != nil {
 		return err
 	}

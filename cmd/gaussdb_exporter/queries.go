@@ -34,7 +34,7 @@ type UserQuery struct {
 type UserQueries map[string]UserQuery
 
 // OverrideQuery 's are run in-place of simple namespace look ups, and provide
-// advanced functionality. But they have a tendency to postgres version specific.
+// advanced functionality. But they have a tendency to gaussdb version specific.
 // There aren't too many versions, so we simply store customized versions using
 // the semver matching we do for columns.
 type OverrideQuery struct {
@@ -233,7 +233,7 @@ func parseUserQueries(content []byte) (map[string]intermediateMetricMap, map[str
 
 // Add queries to the builtinMetricMaps and queryOverrides maps. Added queries do not
 // respect version requirements, because it is assumed that the user knows
-// what they are doing with their version of postgres.
+// what they are doing with their version of gaussdb.
 //
 // This function modifies metricMap and queryOverrideMap to contain the new
 // queries.

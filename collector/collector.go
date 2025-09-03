@@ -87,19 +87,19 @@ func registerCollector(name string, isDefaultEnabled bool, createFunc func(colle
 	factories[name] = createFunc
 }
 
-// PostgresCollector implements the prometheus.Collector interface.
-type PostgresCollector struct {
+// GaussDBCollector implements the prometheus.Collector interface.
+type GaussDBCollector struct {
 	Collectors map[string]Collector
 	logger     *slog.Logger
 
 	instance *instance
 }
 
-type Option func(*PostgresCollector) error
+type Option func(*GaussDBCollector) error
 
-// NewPostgresCollector creates a new PostgresCollector.
-func NewPostgresCollector(logger *slog.Logger, excludeDatabases []string, dsn string, filters []string, options ...Option) (*PostgresCollector, error) {
-	p := &PostgresCollector{
+// NewGaussDBCollector creates a new GaussDBCollector.
+func NewGaussDBCollector(logger *slog.Logger, excludeDatabases []string, dsn string, filters []string, options ...Option) (*GaussDBCollector, error) {
+	p := &GaussDBCollector{
 		logger: logger,
 	}
 	// Apply options to customize the collector
@@ -159,13 +159,13 @@ func NewPostgresCollector(logger *slog.Logger, excludeDatabases []string, dsn st
 }
 
 // Describe implements the prometheus.Collector interface.
-func (p PostgresCollector) Describe(ch chan<- *prometheus.Desc) {
+func (p GaussDBCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- scrapeDurationDesc
 	ch <- scrapeSuccessDesc
 }
 
 // Collect implements the prometheus.Collector interface.
-func (p PostgresCollector) Collect(ch chan<- prometheus.Metric) {
+func (p GaussDBCollector) Collect(ch chan<- prometheus.Metric) {
 	ctx := context.TODO()
 
 	// copy the instance so that concurrent scrapes have independent instances
@@ -190,7 +190,7 @@ func (p PostgresCollector) Collect(ch chan<- prometheus.Metric) {
 	wg.Wait()
 }
 
-func (p *PostgresCollector) Close() error {
+func (p *GaussDBCollector) Close() error {
 	return p.instance.Close()
 }
 

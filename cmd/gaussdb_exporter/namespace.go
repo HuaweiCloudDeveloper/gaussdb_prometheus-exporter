@@ -31,7 +31,7 @@ func queryNamespaceMapping(server *Server, namespace string, mapping MetricMapNa
 	query, found := server.queryOverrides[namespace]
 
 	// Was this query disabled (i.e. nothing sensible can be queried on cu
-	// version of PostgreSQL?
+	// version of GaussDB?
 	if query == "" && found {
 		// Return success (no pertinent data)
 		return []prometheus.Metric{}, []error{}, nil

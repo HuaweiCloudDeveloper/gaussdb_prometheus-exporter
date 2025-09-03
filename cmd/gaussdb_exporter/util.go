@@ -218,7 +218,7 @@ func ParseURL(url string) (string, error) {
 		return "", err
 	}
 
-	if u.Scheme != "postgres" && u.Scheme != "postgresql" {
+	if u.Scheme != "gaussdb" {
 		return "", fmt.Errorf("invalid connection protocol: %s", u.Scheme)
 	}
 

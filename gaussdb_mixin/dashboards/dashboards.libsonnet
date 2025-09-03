@@ -1,5 +1,5 @@
 {
   grafanaDashboards+:: {
-    'postgres-overview.json': (import 'postgres-overview.json'),
+    'gaussdb-overview.json': (import 'gaussdb-overview.json'),
   },
 }

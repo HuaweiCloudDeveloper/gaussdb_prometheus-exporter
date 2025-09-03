@@ -39,28 +39,28 @@ func Test_dsn_String(t *testing.T) {
 		{
 			name: "Without Password",
 			fields: fields{
-				scheme:   "postgresql",
+				scheme:   "gaussdb",
 				username: "test",
 				host:     "localhost:5432",
 				query:    url.Values{},
 			},
-			want: "postgresql://test@localhost:5432?",
+			want: "gaussdb://test@localhost:5432?",
 		},
 		{
 			name: "With Password",
 			fields: fields{
-				scheme:   "postgresql",
+				scheme:   "gaussdb",
 				username: "test",
 				password: "supersecret",
 				host:     "localhost:5432",
 				query:    url.Values{},
 			},
-			want: "postgresql://test:******@localhost:5432?",
+			want: "gaussdb://test:******@localhost:5432?",
 		},
 		{
 			name: "With Password and Query String",
 			fields: fields{
-				scheme:   "postgresql",
+				scheme:   "gaussdb",
 				username: "test",
 				password: "supersecret",
 				host:     "localhost:5432",
@@ -68,12 +68,12 @@ func Test_dsn_String(t *testing.T) {
 					"ssldisable": []string{"true"},
 				},
 			},
-			want: "postgresql://test:******@localhost:5432?ssldisable=true",
+			want: "gaussdb://test:******@localhost:5432?ssldisable=true",
 		},
 		{
 			name: "With Password, Path, and Query String",
 			fields: fields{
-				scheme:   "postgresql",
+				scheme:   "gaussdb",
 				username: "test",
 				password: "supersecret",
 				host:     "localhost:5432",
@@ -82,7 +82,7 @@ func Test_dsn_String(t *testing.T) {
 					"ssldisable": []string{"true"},
 				},
 			},
-			want: "postgresql://test:******@localhost:5432/somevalue?ssldisable=true",
+			want: "gaussdb://test:******@localhost:5432/somevalue?ssldisable=true",
 		},
 	}
 	for _, tt := range tests {
@@ -115,11 +115,11 @@ func Test_dsnFromString(t *testing.T) {
 	}{
 		{
 			name:  "Key value with password",
-			input: "host=host.example.com user=postgres port=5432 password=s3cr3t",
+			input: "host=host.example.com user=gaussdb port=5432 password=s3cr3t",
 			want: DSN{
-				scheme:   "postgresql",
+				scheme:   "gaussdb",
 				host:     "host.example.com:5432",
-				username: "postgres",
+				username: "gaussdb",
 				password: "s3cr3t",
 				query:    url.Values{},
 			},
@@ -127,11 +127,11 @@ func Test_dsnFromString(t *testing.T) {
 		},
 		{
 			name:  "Key value with quoted password and space",
-			input: "host=host.example.com user=postgres port=5432 password=\"s3cr 3t\"",
+			input: "host=host.example.com user=gaussdb port=5432 password=\"s3cr 3t\"",
 			want: DSN{
-				scheme:   "postgresql",
+				scheme:   "gaussdb",
 				host:     "host.example.com:5432",
-				username: "postgres",
+				username: "gaussdb",
 				password: "s3cr 3t",
 				query:    url.Values{},
 			},
@@ -139,11 +139,11 @@ func Test_dsnFromString(t *testing.T) {
 		},
 		{
 			name:  "Key value with different order",
-			input: "password=abcde host=host.example.com user=postgres port=5432",
+			input: "password=abcde host=host.example.com user=gaussdb port=5432",
 			want: DSN{
-				scheme:   "postgresql",
+				scheme:   "gaussdb",
 				host:     "host.example.com:5432",
-				username: "postgres",
+				username: "gaussdb",
 				password: "abcde",
 				query:    url.Values{},
 			},
@@ -151,11 +151,11 @@ func Test_dsnFromString(t *testing.T) {
 		},
 		{
 			name:  "Key value with different order, quoted password, duplicate password",
-			input: "password=abcde host=host.example.com user=postgres port=5432 password=\"s3cr 3t\"",
+			input: "password=abcde host=host.example.com user=gaussdb port=5432 password=\"s3cr 3t\"",
 			want: DSN{
-				scheme:   "postgresql",
+				scheme:   "gaussdb",
 				host:     "host.example.com:5432",
-				username: "postgres",
+				username: "gaussdb",
 				password: "s3cr 3t",
 				query:    url.Values{},
 			},
@@ -163,21 +163,21 @@ func Test_dsnFromString(t *testing.T) {
 		},
 		{
 			name:  "URL with user in query string",
-			input: "postgresql://host.example.com:5432/tsdb?user=postgres",
+			input: "gaussdb://host.example.com:5432/tsdb?user=gaussdb",
 			want: DSN{
-				scheme:   "postgresql",
+				scheme:   "gaussdb",
 				host:     "host.example.com:5432",
 				path:     "/tsdb",
 				query:    url.Values{},
-				username: "postgres",
+				username: "gaussdb",
 			},
 			wantErr: false,
 		},
 		{
 			name:  "URL with user and password",
-			input: "postgresql://user:s3cret@host.example.com:5432/tsdb?user=postgres",
+			input: "gaussdb://user:s3cret@host.example.com:5432/tsdb?user=gaussdb",
 			want: DSN{
-				scheme:   "postgresql",
+				scheme:   "gaussdb",
 				host:     "host.example.com:5432",
 				path:     "/tsdb",
 				query:    url.Values{},
@@ -188,9 +188,9 @@ func Test_dsnFromString(t *testing.T) {
 		},
 		{
 			name:  "Alternative URL prefix",
-			input: "postgres://user:s3cret@host.example.com:5432/tsdb?user=postgres",
+			input: "gaussdb://user:s3cret@host.example.com:5432/tsdb?user=gaussdb",
 			want: DSN{
-				scheme:   "postgres",
+				scheme:   "gaussdb",
 				host:     "host.example.com:5432",
 				path:     "/tsdb",
 				query:    url.Values{},
@@ -201,13 +201,13 @@ func Test_dsnFromString(t *testing.T) {
 		},
 		{
 			name:  "URL with user and password in query string",
-			input: "postgresql://host.example.com:5432/tsdb?user=postgres&password=s3cr3t",
+			input: "gaussdb://host.example.com:5432/tsdb?user=gaussdb&password=s3cr3t",
 			want: DSN{
-				scheme:   "postgresql",
+				scheme:   "gaussdb",
 				host:     "host.example.com:5432",
 				path:     "/tsdb",
 				query:    url.Values{},
-				username: "postgres",
+				username: "gaussdb",
 				password: "s3cr3t",
 			},
 			wantErr: false,

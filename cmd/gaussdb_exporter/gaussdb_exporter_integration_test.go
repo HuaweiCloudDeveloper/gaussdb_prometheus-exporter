@@ -105,7 +105,7 @@ func (s *IntegrationSuite) TestInvalidDsnDoesntCrash(c *C) {
 	exporter.scrape(ch)
 
 	// Send a DSN to a non-listening port.
-	exporter = NewExporter([]string{"postgresql://nothing:nothing@127.0.0.1:1/nothing"})
+	exporter = NewExporter([]string{"gaussdb://nothing:nothing@127.0.0.1:1/nothing"})
 	c.Assert(exporter, NotNil)
 	exporter.scrape(ch)
 }

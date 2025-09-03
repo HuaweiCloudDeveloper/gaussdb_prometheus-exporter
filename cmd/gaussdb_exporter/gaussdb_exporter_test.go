@@ -124,7 +124,7 @@ func (s *FunctionalSuite) TestEnvironmentSettingWithSecretsFiles(c *C) {
 	c.Assert(err, IsNil)
 	defer UnsetEnvironment(c, "DATA_SOURCE_URI")
 
-	var expected = "postgresql://custom_username$&+,%2F%3A;=%3F%40:custom_password$&+,%2F%3A;=%3F%40@localhost:5432/?sslmode=disable"
+	var expected = "gaussdb://custom_username$&+,%2F%3A;=%3F%40:custom_password$&+,%2F%3A;=%3F%40@localhost:5432/?sslmode=disable"
 
 	dsn, err := getDataSources()
 	if err != nil {
@@ -141,7 +141,7 @@ func (s *FunctionalSuite) TestEnvironmentSettingWithSecretsFiles(c *C) {
 
 // test read DATA_SOURCE_NAME from environment
 func (s *FunctionalSuite) TestEnvironmentSettingWithDns(c *C) {
-	envDsn := "postgresql://user:password@localhost:5432/?sslmode=enabled"
+	envDsn := "gaussdb://user:password@localhost:5432/?sslmode=enabled"
 	err := os.Setenv("DATA_SOURCE_NAME", envDsn)
 	c.Assert(err, IsNil)
 	defer UnsetEnvironment(c, "DATA_SOURCE_NAME")
@@ -161,7 +161,7 @@ func (s *FunctionalSuite) TestEnvironmentSettingWithDns(c *C) {
 
 // test DATA_SOURCE_NAME is used even if username and password environment variables are set
 func (s *FunctionalSuite) TestEnvironmentSettingWithDnsAndSecrets(c *C) {
-	envDsn := "postgresql://userDsn:passwordDsn@localhost:55432/?sslmode=disabled"
+	envDsn := "gaussdb://userDsn:passwordDsn@localhost:55432/?sslmode=disabled"
 	err := os.Setenv("DATA_SOURCE_NAME", envDsn)
 	c.Assert(err, IsNil)
 	defer UnsetEnvironment(c, "DATA_SOURCE_NAME")
@@ -187,7 +187,7 @@ func (s *FunctionalSuite) TestEnvironmentSettingWithDnsAndSecrets(c *C) {
 	}
 }
 
-func (s *FunctionalSuite) TestPostgresVersionParsing(c *C) {
+func (s *FunctionalSuite) TestGaussDBVersionParsing(c *C) {
 	type TestCase struct {
 		input    string
 		expected string
@@ -222,11 +222,11 @@ func (s *FunctionalSuite) TestParseFingerprint(c *C) {
 		err         string
 	}{
 		{
-			url:         "postgresql://userDsn:passwordDsn@localhost:55432/?sslmode=disabled",
+			url:         "gaussdb://userDsn:passwordDsn@localhost:55432/?sslmode=disabled",
 			fingerprint: "localhost:55432",
 		},
 		{
-			url:         "postgresql://userDsn:passwordDsn%3D@localhost:55432/?sslmode=disabled",
+			url:         "gaussdb://userDsn:passwordDsn%3D@localhost:55432/?sslmode=disabled",
 			fingerprint: "localhost:55432",
 		},
 		{

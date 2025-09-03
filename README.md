@@ -3,24 +3,24 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/prometheus-community/postgres_exporter)](https://goreportcard.com/report/github.com/prometheus-community/postgres_exporter)
 [![Docker Pulls](https://img.shields.io/docker/pulls/prometheuscommunity/postgres-exporter.svg)](https://hub.docker.com/r/prometheuscommunity/postgres-exporter/tags)
 
-# PostgreSQL Server Exporter
+# GaussDB Server Exporter
 
-Prometheus exporter for PostgreSQL server metrics.
+Prometheus exporter for GaussDB server metrics.
 
-CI Tested PostgreSQL versions: `11`, `12`, `13`, `14`, `15`, `16`, `17`.
+CI Tested GaussDB versions: `11`, `12`, `13`, `14`, `15`, `16`, `17`.
 
 ## Quick Start
 This package is available for Docker:
 ```
 # Start an example database
-docker run --net=host -it --rm -e POSTGRES_PASSWORD=password postgres
+docker run --net=host -it --rm -e POSTGRES_PASSWORD=password gaussdb
 # Connect to it
 docker run \
   --net=host \
-  -e DATA_SOURCE_URI="localhost:5432/postgres?sslmode=disable" \
-  -e DATA_SOURCE_USER=postgres \
+  -e DATA_SOURCE_URI="localhost:5432/gaussdb?sslmode=disable" \
+  -e DATA_SOURCE_USER=gaussdb \
   -e DATA_SOURCE_PASS=password \
-  quay.io/prometheuscommunity/postgres-exporter
+  quay.io/prometheuscommunity/gaussdb-exporter
 ```
 
 Test with:
@@ -31,7 +31,7 @@ curl "http://localhost:9187/metrics"
 Example Prometheus config:
 ```yaml
 scrape_configs:
-  - job_name: postgres
+  - job_name: gaussdb
     static_configs:
       - targets: ["127.0.0.1:9187"] # Replace IP with the hostname of the docker container if you're running the container in a separate network
 ```
@@ -43,16 +43,16 @@ The container process runs with uid/gid 65534 (important for file permissions).
 ## Multi-Target Support (BETA)
 **This Feature is in beta and may require changes in future releases. Feedback is welcome.**
 
-This exporter supports the [multi-target pattern](https://prometheus.io/docs/guides/multi-target-exporter/). This allows running a single instance of this exporter for multiple postgres targets. Using the multi-target functionality of this exporter is **optional** and meant for cases where it is impossible to install the exporter as a sidecar, for example SaaS-managed services.
+This exporter supports the [multi-target pattern](https://prometheus.io/docs/guides/multi-target-exporter/). This allows running a single instance of this exporter for multiple gaussdb targets. Using the multi-target functionality of this exporter is **optional** and meant for cases where it is impossible to install the exporter as a sidecar, for example SaaS-managed services.
 
-To use the multi-target functionality, send an http request to the endpoint `/probe?target=foo:5432` where target is set to the DSN of the postgres instance to scrape metrics from.
+To use the multi-target functionality, send an http request to the endpoint `/probe?target=foo:5432` where target is set to the DSN of the gaussdb instance to scrape metrics from.
 
 To avoid putting sensitive information like username and password in the URL, preconfigured auth modules are supported via the [auth_modules](#auth_modules) section of the config file. auth_modules for DSNs can be used with the `/probe` endpoint by specifying the `?auth_module=foo` http parameter.
 
 Example Prometheus config:
 ```yaml
 scrape_configs:
-  - job_name: 'postgres'
+  - job_name: 'gaussdb'
     static_configs:
       - targets:
         - server1:5432
@@ -66,12 +66,12 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 127.0.0.1:9116  # The postgres exporter's real hostname:port.
+        replacement: 127.0.0.1:9116  # The gaussdb exporter's real hostname:port.
 ```
 
 ## Configuration File
 
-The configuration file controls the behavior of the exporter. It can be set using the `--config.file` command line flag and defaults to `postgres_exporter.yml`.
+The configuration file controls the behavior of the exporter. It can be set using the `--config.file` command line flag and defaults to `gaussdb_exporter.yml`.
 
 ### auth_modules
 This section defines preset authentication and connection parameters for use in the [multi-target endpoint](#multi-target-support-beta). `auth_modules` is a map of modules with the key being the identifier which can be used in the `/probe` endpoint.
@@ -92,10 +92,10 @@ auth_modules:
 
 ## Building and running
 
-    git clone https://github.com/prometheus-community/postgres_exporter.git
-    cd postgres_exporter
+    git clone https://github.com/prometheus-community/gaussdb_exporter.git
+    cd gaussdb_exporter
     make build
-    ./postgres_exporter <flags>
+    ./gaussdb_exporter <flags>
 
 To build the Docker image:
 
@@ -103,7 +103,7 @@ To build the Docker image:
     promu crossbuild -p linux/amd64 -p linux/armv7 -p linux/arm64 -p linux/ppc64le
     make docker
 
-This will build the docker image as `prometheuscommunity/postgres_exporter:${branch}`.
+This will build the docker image as `prometheuscommunity/gaussdb_exporter:${branch}`.
 
 ### Flags
 
@@ -175,7 +175,7 @@ This will build the docker image as `prometheuscommunity/postgres_exporter:${bra
   Enable the `xlog_location` collector (default: disabled).
 
 * `config.file`
-  Set the config file path. Default is `postgres_exporter.yml`
+  Set the config file path. Default is `gaussdb_exporter.yml`
 
 * `web.systemd-socket`
   Use systemd socket activation listeners instead of port listeners (Linux only). Default is `false`
@@ -236,7 +236,7 @@ The following environment variables configure the exporter:
 * `DATA_SOURCE_URI`
    an alternative to `DATA_SOURCE_NAME` which exclusively accepts the hostname
    without a username and password component. For example, `my_pg_hostname` or
-   `my_pg_hostname:5432/postgres?sslmode=disable`.
+   `my_pg_hostname:5432/gaussdb?sslmode=disable`.
 
 * `DATA_SOURCE_URI_FILE`
    The same as above but reads the URI from a file.
@@ -282,22 +282,22 @@ The following environment variables configure the exporter:
   means allow all.
 
 * `PG_EXPORTER_METRIC_PREFIX`
-  A prefix to use for each of the default metrics exported by postgres-exporter. Default is `pg`
+  A prefix to use for each of the default metrics exported by gaussdb-exporter. Default is `pg`
 
 Settings set by environment variables starting with `PG_` will be overwritten by the corresponding CLI flag if given.
 
-### Setting the Postgres server's data source name
+### Setting the GaussDB server's data source name
 
-The PostgreSQL server's [data source name](http://en.wikipedia.org/wiki/Data_source_name)
+The GaussDB server's [data source name](http://en.wikipedia.org/wiki/Data_source_name)
 must be set via the `DATA_SOURCE_NAME` environment variable.
 
 For running it locally on a default Debian/Ubuntu install, this will work (transpose to init script as appropriate):
 
-    sudo -u postgres DATA_SOURCE_NAME="user=postgres host=/var/run/postgresql/ sslmode=disable" postgres_exporter
+    sudo -u gaussdb DATA_SOURCE_NAME="user=gaussdb host=/var/run/gaussdb/ sslmode=disable" gaussdb_exporter
 
 Also, you can set a list of sources to scrape different instances from the one exporter setup. Just define a comma separated string.
 
-    sudo -u postgres DATA_SOURCE_NAME="port=5432,port=6432" postgres_exporter
+    sudo -u gaussdb DATA_SOURCE_NAME="port=5432,port=6432" gaussdb_exporter
 
 See the [github.com/lib/pq](http://github.com/lib/pq) module for other ways to format the connection string.
 
@@ -305,7 +305,7 @@ See the [github.com/lib/pq](http://github.com/lib/pq) module for other ways to f
 
 The exporter will attempt to dynamically export additional metrics if they are added in the
 future, but they will be marked as "untyped". Additional metric maps can be easily created
-from Postgres documentation by copying the tables and using the following Python snippet:
+from gaussdb documentation by copying the tables and using the following Python snippet:
 
 ```python
 x = """tab separated raw text of a documentation table"""
@@ -324,8 +324,8 @@ The -extend.query-path command-line argument specifies a YAML file containing ad
 Some examples are provided in [queries.yaml](queries.yaml).
 
 ### Disabling default metrics
-To work with non-officially-supported postgres versions (e.g. 8.2.15),
-or variants of postgres (e.g. Greenplum), you can disable the default metrics with the `--disable-default-metrics`
+To work with non-officially-supported gaussdb versions (e.g. 8.2.15),
+or variants of gaussdb (e.g. Greenplum), you can disable the default metrics with the `--disable-default-metrics`
 flag. This removes all built-in metrics, and uses only metrics defined by queries in the `queries.yaml` file you supply
 (so you must supply one, otherwise the exporter will return nothing but internal statuses and not your database).
 
@@ -341,9 +341,9 @@ If you want to include only subset of databases, you can use option `--include-d
 
 ### Running as non-superuser
 
-To be able to collect metrics from `pg_stat*` views as non-superuser in PostgreSQL
+To be able to collect metrics from `pg_stat*` views as non-superuser in GaussDB
 server versions >= 10 you can grant the `pg_monitor` or `pg_read_all_stats` [built-in roles](https://www.postgresql.org/docs/current/predefined-roles.html) to the user. If
-you need to monitor older PostgreSQL servers, you will have to create functions
+you need to monitor older GaussDB servers, you will have to create functions
 and views as a superuser, and assign permissions separately to those.
 
 ```sql
@@ -359,7 +359,7 @@ BEGIN
           SELECT                       -- SELECT list can stay empty for this
           FROM   pg_catalog.pg_user
           WHERE  usename = 'gaussdb_exporter') THEN
-    CREATE USER postgres_exporter;
+    CREATE USER gaussdb_exporter;
   END IF;
 END;
 $$ language plpgsql;
@@ -367,29 +367,29 @@ $$ language plpgsql;
 SELECT __tmp_create_user();
 DROP FUNCTION __tmp_create_user();
 
-ALTER USER postgres_exporter WITH PASSWORD 'password';
-ALTER USER postgres_exporter SET SEARCH_PATH TO postgres_exporter,pg_catalog;
+ALTER USER gaussdb_exporter WITH PASSWORD 'password';
+ALTER USER gaussdb_exporter SET SEARCH_PATH TO gaussdb_exporter,pg_catalog;
 
 -- If deploying as non-superuser (for example in AWS RDS), uncomment the GRANT
 -- line below and replace <MASTER_USER> with your root user.
 -- GRANT gaussdb_exporter TO <MASTER_USER>;
 
-GRANT CONNECT ON DATABASE postgres TO postgres_exporter;
+GRANT CONNECT ON DATABASE gaussdb TO gaussdb_exporter;
 ```
 
 Run following command if you use PostgreSQL versions >= 10
 ```sql
-GRANT pg_monitor to postgres_exporter;
+GRANT pg_monitor to gaussdb_exporter;
 ```
 
 Run following SQL commands only if you use PostgreSQL versions older than 10.
-In PostgreSQL, views run with the permissions of the user that created them so
+In GaussDB, views run with the permissions of the user that created them so
 they can act as security barriers. Functions need to be created to share this
 data with the non-superuser. Only creating the views will leave out the most
 important bits of data.
 ```sql
-CREATE SCHEMA IF NOT EXISTS postgres_exporter;
-GRANT USAGE ON SCHEMA postgres_exporter TO postgres_exporter;
+CREATE SCHEMA IF NOT EXISTS gaussdb_exporter;
+GRANT USAGE ON SCHEMA gaussdb_exporter TO gaussdb_exporter;
 
 CREATE OR REPLACE FUNCTION get_pg_stat_activity() RETURNS SETOF pg_stat_activity AS
 $$ SELECT * FROM pg_catalog.pg_stat_activity; $$
@@ -397,11 +397,11 @@ LANGUAGE sql
 VOLATILE
 SECURITY DEFINER;
 
-CREATE OR REPLACE VIEW postgres_exporter.pg_stat_activity
+CREATE OR REPLACE VIEW gaussdb_exporter.pg_stat_activity
 AS
   SELECT * from get_pg_stat_activity();
 
-GRANT SELECT ON postgres_exporter.pg_stat_activity TO postgres_exporter;
+GRANT SELECT ON gaussdb_exporter.pg_stat_activity TO gaussdb_exporter;
 
 CREATE OR REPLACE FUNCTION get_pg_stat_replication() RETURNS SETOF pg_stat_replication AS
 $$ SELECT * FROM pg_catalog.pg_stat_replication; $$
@@ -409,11 +409,11 @@ LANGUAGE sql
 VOLATILE
 SECURITY DEFINER;
 
-CREATE OR REPLACE VIEW postgres_exporter.pg_stat_replication
+CREATE OR REPLACE VIEW gaussdb_exporter.pg_stat_replication
 AS
   SELECT * FROM get_pg_stat_replication();
 
-GRANT SELECT ON postgres_exporter.pg_stat_replication TO postgres_exporter;
+GRANT SELECT ON gaussdb_exporter.pg_stat_replication TO gaussdb_exporter;
 
 CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
 CREATE OR REPLACE FUNCTION get_pg_stat_statements() RETURNS SETOF pg_stat_statements AS
@@ -422,17 +422,17 @@ LANGUAGE sql
 VOLATILE
 SECURITY DEFINER;
 
-CREATE OR REPLACE VIEW postgres_exporter.pg_stat_statements
+CREATE OR REPLACE VIEW gaussdb_exporter.pg_stat_statements
 AS
   SELECT * FROM get_pg_stat_statements();
 
-GRANT SELECT ON postgres_exporter.pg_stat_statements TO postgres_exporter;
+GRANT SELECT ON gaussdb_exporter.pg_stat_statements TO gaussdb_exporter;
 ```
 
 > **NOTE**
-> <br />Remember to use `postgres` database name in the connection string:
+> <br />Remember to use `gaussdb` database name in the connection string:
 > ```
-> DATA_SOURCE_NAME=postgresql://postgres_exporter:password@localhost:5432/postgres?sslmode=disable
+> DATA_SOURCE_NAME=gaussdb://gaussdb_exporter:password@localhost:5432/gaussdb?sslmode=disable
 > ```
 
 
@@ -441,7 +441,7 @@ GRANT SELECT ON postgres_exporter.pg_stat_statements TO postgres_exporter;
 # Run the unit tests
 make test
 # Start the test database with docker
-docker run -p 5432:5432 -e POSTGRES_DB=circle_test -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=test -d postgres
+docker run -p 5432:5432 -e POSTGRES_DB=circle_test -e POSTGRES_USER=gaussdb -e POSTGRES_PASSWORD=test -d gaussdb
 # Run the integration tests
-DATA_SOURCE_NAME='postgresql://postgres:test@localhost:5432/circle_test?sslmode=disable' GOOPTS='-v -tags integration' make test
+DATA_SOURCE_NAME='gaussdb://gaussdb:test@localhost:5432/circle_test?sslmode=disable' GOOPTS='-v -tags integration' make test
 ```

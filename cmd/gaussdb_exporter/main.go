@@ -37,7 +37,7 @@ var (
 		Config: &config.Config{},
 	}
 
-	configFile             = kingpin.Flag("config.file", "Postgres exporter configuration file.").Default("gaussdb_exporter.yml").String()
+	configFile             = kingpin.Flag("config.file", "GaussDB exporter configuration file.").Default("gaussdb_exporter.yml").String()
 	webConfig              = kingpinflag.AddFlags(kingpin.CommandLine, ":9187")
 	metricsPath            = kingpin.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").Envar("PG_EXPORTER_WEB_TELEMETRY_PATH").String()
 	disableDefaultMetrics  = kingpin.Flag("disable-default-metrics", "Do not include default metrics.").Default("false").Envar("PG_EXPORTER_DISABLE_DEFAULT_METRICS").Bool()
@@ -131,14 +131,14 @@ func main() {
 		dsn = dsns[0]
 	}
 
-	pe, err := collector.NewPostgresCollector(
+	pe, err := collector.NewGaussDBCollector(
 		logger,
 		excludedDatabases,
 		dsn,
 		[]string{},
 	)
 	if err != nil {
-		logger.Warn("Failed to create PostgresCollector", "err", err.Error())
+		logger.Warn("Failed to create GaussDBCollector", "err", err.Error())
 	} else {
 		prometheus.MustRegister(pe)
 	}
@@ -147,8 +147,8 @@ func main() {
 
 	if *metricsPath != "/" && *metricsPath != "" {
 		landingConfig := web.LandingConfig{
-			Name:        "Postgres Exporter",
-			Description: "Prometheus PostgreSQL server Exporter",
+			Name:        "GaussDB Exporter",
+			Description: "Prometheus GaussDB server Exporter",
 			Version:     version.Info(),
 			Links: []web.LandingLinks{
 				{

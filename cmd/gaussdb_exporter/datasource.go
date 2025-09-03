@@ -109,7 +109,7 @@ func (e *Exporter) scrapeDSN(ch chan<- prometheus.Metric, dsn string) error {
 
 	// Check if map versions need to be updated
 	if err := e.checkMapVersions(ch, server); err != nil {
-		logger.Warn("Proceeding with outdated query maps, as the Postgres version could not be determined", "err", err)
+		logger.Warn("Proceeding with outdated query maps, as the GaussDB version could not be determined", "err", err)
 	}
 
 	return server.Scrape(ch, e.disableSettingsMetrics)

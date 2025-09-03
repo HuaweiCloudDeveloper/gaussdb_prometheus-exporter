@@ -73,7 +73,7 @@ type ArrayDelimiter interface {
 	ArrayDelimiter() string
 }
 
-// BoolArray represents a one-dimensional array of the PostgreSQL boolean type.
+// BoolArray represents a one-dimensional array of the GaussDB boolean type.
 type BoolArray []bool
 
 // Scan implements the sql.Scanner interface.
@@ -147,7 +147,7 @@ func (a BoolArray) Value() (driver.Value, error) {
 	return "{}", nil
 }
 
-// ByteaArray represents a one-dimensional array of the PostgreSQL bytea type.
+// ByteaArray represents a one-dimensional array of the GaussDB bytea type.
 type ByteaArray [][]byte
 
 // Scan implements the sql.Scanner interface.
@@ -186,7 +186,7 @@ func (a *ByteaArray) scanBytes(src []byte) error {
 }
 
 // Value implements the driver.Valuer interface. It uses the "hex" format which
-// is only supported on PostgreSQL 9.0 or newer.
+// is only supported on GaussDB 9.0 or newer.
 func (a ByteaArray) Value() (driver.Value, error) {
 	if a == nil {
 		return nil, nil
@@ -218,7 +218,7 @@ func (a ByteaArray) Value() (driver.Value, error) {
 	return "{}", nil
 }
 
-// Float64Array represents a one-dimensional array of the PostgreSQL double
+// Float64Array represents a one-dimensional array of the GaussDB double
 // precision type.
 type Float64Array []float64
 
@@ -280,7 +280,7 @@ func (a Float64Array) Value() (driver.Value, error) {
 	return "{}", nil
 }
 
-// Float32Array represents a one-dimensional array of the PostgreSQL double
+// Float32Array represents a one-dimensional array of the GaussDB double
 // precision type.
 type Float32Array []float32
 
@@ -499,7 +499,7 @@ func (a GenericArray) Value() (driver.Value, error) {
 	return "{}", nil
 }
 
-// Int64Array represents a one-dimensional array of the PostgreSQL integer types.
+// Int64Array represents a one-dimensional array of the GaussDB integer types.
 type Int64Array []int64
 
 // Scan implements the sql.Scanner interface.
@@ -560,7 +560,7 @@ func (a Int64Array) Value() (driver.Value, error) {
 	return "{}", nil
 }
 
-// Int32Array represents a one-dimensional array of the PostgreSQL integer types.
+// Int32Array represents a one-dimensional array of the GaussDB integer types.
 type Int32Array []int32
 
 // Scan implements the sql.Scanner interface.
@@ -623,7 +623,7 @@ func (a Int32Array) Value() (driver.Value, error) {
 	return "{}", nil
 }
 
-// StringArray represents a one-dimensional array of the PostgreSQL character types.
+// StringArray represents a one-dimensional array of the GaussDB character types.
 type StringArray []string
 
 // Scan implements the sql.Scanner interface.

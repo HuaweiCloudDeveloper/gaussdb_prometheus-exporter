@@ -1,6 +1,6 @@
 // Package oid contains OID constants
-// as defined by the Postgres server.
+// as defined by the GaussDB server.
 package oid
 
-// Oid is a Postgres Object ID.
+// Oid is a GaussDB Object ID.
 type Oid uint32

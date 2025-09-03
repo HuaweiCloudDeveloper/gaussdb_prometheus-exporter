@@ -37,7 +37,7 @@ func TestPGStatProgressVacuumCollector(t *testing.T) {
 	}
 
 	rows := sqlmock.NewRows(columns).AddRow(
-		"postgres", "a_table", 3, 3000, 400, 200, 2, 500, 123)
+		"gaussdb", "a_table", 3, 3000, 400, 200, 2, 500, 123)
 
 	mock.ExpectQuery(sanitizeQuery(statProgressVacuumQuery)).WillReturnRows(rows)
 
@@ -52,19 +52,19 @@ func TestPGStatProgressVacuumCollector(t *testing.T) {
 	}()
 
 	expected := []MetricResult{
-		{labels: labelMap{"datname": "postgres", "relname": "a_table", "phase": "initializing"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "a_table", "phase": "scanning heap"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "a_table", "phase": "vacuuming indexes"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "a_table", "phase": "vacuuming heap"}, metricType: dto.MetricType_GAUGE, value: 1},
-		{labels: labelMap{"datname": "postgres", "relname": "a_table", "phase": "cleaning up indexes"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "a_table", "phase": "truncating heap"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "a_table", "phase": "performing final cleanup"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 3000},
-		{labels: labelMap{"datname": "postgres", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 400},
-		{labels: labelMap{"datname": "postgres", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 200},
-		{labels: labelMap{"datname": "postgres", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 2},
-		{labels: labelMap{"datname": "postgres", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 500},
-		{labels: labelMap{"datname": "postgres", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 123},
+		{labels: labelMap{"datname": "gaussdb", "relname": "a_table", "phase": "initializing"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "a_table", "phase": "scanning heap"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "a_table", "phase": "vacuuming indexes"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "a_table", "phase": "vacuuming heap"}, metricType: dto.MetricType_GAUGE, value: 1},
+		{labels: labelMap{"datname": "gaussdb", "relname": "a_table", "phase": "cleaning up indexes"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "a_table", "phase": "truncating heap"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "a_table", "phase": "performing final cleanup"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 3000},
+		{labels: labelMap{"datname": "gaussdb", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 400},
+		{labels: labelMap{"datname": "gaussdb", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 200},
+		{labels: labelMap{"datname": "gaussdb", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 2},
+		{labels: labelMap{"datname": "gaussdb", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 500},
+		{labels: labelMap{"datname": "gaussdb", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 123},
 	}
 
 	convey.Convey("Metrics comparison", t, func() {
@@ -93,7 +93,7 @@ func TestPGStatProgressVacuumCollectorNullValues(t *testing.T) {
 	}
 
 	rows := sqlmock.NewRows(columns).AddRow(
-		"postgres", nil, nil, nil, nil, nil, nil, nil, nil)
+		"gaussdb", nil, nil, nil, nil, nil, nil, nil, nil)
 
 	mock.ExpectQuery(sanitizeQuery(statProgressVacuumQuery)).WillReturnRows(rows)
 
@@ -108,19 +108,19 @@ func TestPGStatProgressVacuumCollectorNullValues(t *testing.T) {
 	}()
 
 	expected := []MetricResult{
-		{labels: labelMap{"datname": "postgres", "relname": "unknown", "phase": "initializing"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "unknown", "phase": "scanning heap"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "unknown", "phase": "vacuuming indexes"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "unknown", "phase": "vacuuming heap"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "unknown", "phase": "cleaning up indexes"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "unknown", "phase": "truncating heap"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "unknown", "phase": "performing final cleanup"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
-		{labels: labelMap{"datname": "postgres", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "unknown", "phase": "initializing"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "unknown", "phase": "scanning heap"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "unknown", "phase": "vacuuming indexes"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "unknown", "phase": "vacuuming heap"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "unknown", "phase": "cleaning up indexes"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "unknown", "phase": "truncating heap"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "unknown", "phase": "performing final cleanup"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
 	}
 
 	convey.Convey("Metrics comparison", t, func() {

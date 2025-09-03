@@ -32,9 +32,9 @@ func TestPGDatabaseCollector(t *testing.T) {
 	inst := &instance{db: db}
 
 	mock.ExpectQuery(sanitizeQuery(pgDatabaseQuery)).WillReturnRows(sqlmock.NewRows([]string{"datname", "datconnlimit"}).
-		AddRow("postgres", 15))
+		AddRow("gaussdb", 15))
 
-	mock.ExpectQuery(sanitizeQuery(pgDatabaseSizeQuery)).WithArgs("postgres").WillReturnRows(sqlmock.NewRows([]string{"pg_database_size"}).
+	mock.ExpectQuery(sanitizeQuery(pgDatabaseSizeQuery)).WithArgs("gaussdb").WillReturnRows(sqlmock.NewRows([]string{"pg_database_size"}).
 		AddRow(1024))
 
 	ch := make(chan prometheus.Metric)
@@ -47,8 +47,8 @@ func TestPGDatabaseCollector(t *testing.T) {
 	}()
 
 	expected := []MetricResult{
-		{labels: labelMap{"datname": "postgres"}, value: 15, metricType: dto.MetricType_GAUGE},
-		{labels: labelMap{"datname": "postgres"}, value: 1024, metricType: dto.MetricType_GAUGE},
+		{labels: labelMap{"datname": "gaussdb"}, value: 15, metricType: dto.MetricType_GAUGE},
+		{labels: labelMap{"datname": "gaussdb"}, value: 1024, metricType: dto.MetricType_GAUGE},
 	}
 	convey.Convey("Metrics comparison", t, func() {
 		for _, expect := range expected {
@@ -73,9 +73,9 @@ func TestPGDatabaseCollectorNullMetric(t *testing.T) {
 	inst := &instance{db: db}
 
 	mock.ExpectQuery(sanitizeQuery(pgDatabaseQuery)).WillReturnRows(sqlmock.NewRows([]string{"datname", "datconnlimit"}).
-		AddRow("postgres", nil))
+		AddRow("gaussdb", nil))
 
-	mock.ExpectQuery(sanitizeQuery(pgDatabaseSizeQuery)).WithArgs("postgres").WillReturnRows(sqlmock.NewRows([]string{"pg_database_size"}).
+	mock.ExpectQuery(sanitizeQuery(pgDatabaseSizeQuery)).WithArgs("gaussdb").WillReturnRows(sqlmock.NewRows([]string{"pg_database_size"}).
 		AddRow(nil))
 
 	ch := make(chan prometheus.Metric)
@@ -88,8 +88,8 @@ func TestPGDatabaseCollectorNullMetric(t *testing.T) {
 	}()
 
 	expected := []MetricResult{
-		{labels: labelMap{"datname": "postgres"}, value: 0, metricType: dto.MetricType_GAUGE},
-		{labels: labelMap{"datname": "postgres"}, value: 0, metricType: dto.MetricType_GAUGE},
+		{labels: labelMap{"datname": "gaussdb"}, value: 0, metricType: dto.MetricType_GAUGE},
+		{labels: labelMap{"datname": "gaussdb"}, value: 0, metricType: dto.MetricType_GAUGE},
 	}
 	convey.Convey("Metrics comparison", t, func() {
 		for _, expect := range expected {

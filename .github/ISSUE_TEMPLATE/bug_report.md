@@ -27,19 +27,19 @@ assignees: ''
 
 	insert output of `uname -srm` here
 
-* postgres_exporter version:
+* gaussdb_exporter version:
 
-	insert output of `postgres_exporter --version` here
+	insert output of `gaussdb_exporter --version` here
 
-* postgres_exporter flags:
+* gaussdb_exporter flags:
 
 ```
 insert list of flags used here
 ```
 
-* PostgreSQL version:
+* GaussDB version:
 
-	insert PostgreSQL version here
+	insert GaussDB version here
 
 * Logs:
 ```

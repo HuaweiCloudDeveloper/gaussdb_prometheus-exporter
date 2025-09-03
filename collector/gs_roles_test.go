@@ -32,7 +32,7 @@ func TestPGRolesCollector(t *testing.T) {
 	inst := &instance{db: db}
 
 	mock.ExpectQuery(sanitizeQuery(pgRolesConnectionLimitsQuery)).WillReturnRows(sqlmock.NewRows([]string{"rolname", "rolconnlimit"}).
-		AddRow("postgres", 15))
+		AddRow("gaussdb", 15))
 
 	ch := make(chan prometheus.Metric)
 	go func() {
@@ -44,7 +44,7 @@ func TestPGRolesCollector(t *testing.T) {
 	}()
 
 	expected := []MetricResult{
-		{labels: labelMap{"rolname": "postgres"}, value: 15, metricType: dto.MetricType_GAUGE},
+		{labels: labelMap{"rolname": "gaussdb"}, value: 15, metricType: dto.MetricType_GAUGE},
 	}
 	convey.Convey("Metrics comparison", t, func() {
 		for _, expect := range expected {

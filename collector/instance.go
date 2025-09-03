@@ -78,7 +78,7 @@ func (i *instance) Close() error {
 }
 
 // Regex used to get the "short-version" from the postgres version field.
-// The result of SELECT version() is something like "PostgreSQL 9.6.2 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 6.2.1 20160830, 64-bit"
+// The result of SELECT version() is something like "GaussDB 9.6.2 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 6.2.1 20160830, 64-bit"
 var versionRegex = regexp.MustCompile(`GaussDB Kernel (\d+\.\d+\.\d+)`)
 var serverVersionRegex = regexp.MustCompile(`^(\d+\.\d+\.\d+)`)
 

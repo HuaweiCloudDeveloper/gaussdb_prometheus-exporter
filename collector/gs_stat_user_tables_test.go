@@ -75,7 +75,7 @@ func TestPGStatUserTablesCollector(t *testing.T) {
 		"index_size",
 		"table_size"}
 	rows := sqlmock.NewRows(columns).
-		AddRow("postgres",
+		AddRow("gaussdb",
 			"public",
 			"a_table",
 			1,
@@ -111,11 +111,11 @@ func TestPGStatUserTablesCollector(t *testing.T) {
 	}()
 
 	expected := []MetricResult{
-		{labels: labelMap{"datname": "postgres", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 1},
-		{labels: labelMap{"datname": "postgres", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 2},
-		{labels: labelMap{"datname": "postgres", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 3},
-		{labels: labelMap{"datname": "postgres", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 4},
-		{labels: labelMap{"datname": "postgres", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 5},
+		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 1},
+		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 2},
+		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 3},
+		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 4},
+		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 5},
 		{labels: labelMap{"datname": "postgres", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 6},
 		{labels: labelMap{"datname": "postgres", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 7},
 		{labels: labelMap{"datname": "postgres", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 8},

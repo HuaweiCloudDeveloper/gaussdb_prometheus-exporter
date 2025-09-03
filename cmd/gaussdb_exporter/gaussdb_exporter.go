@@ -80,7 +80,7 @@ type Mapping map[string]MappingOptions
 var versionRegex = regexp.MustCompile(`GaussDB Kernel (\d+\.\d+\.\d+)`)
 var lowestSupportedVersion = semver.MustParse("505.0.0")
 
-// Parses the version of postgres into the short version string we can use to
+// Parses the version of gaussdb into the short version string we can use to
 // match behaviors.
 func parseVersion(versionString string) (semver.Version, error) {
 	submatches := versionRegex.FindStringSubmatch(versionString)
@@ -403,7 +403,7 @@ type cachedMetrics struct {
 	lastScrape time.Time
 }
 
-// Exporter collects Postgres metrics. It implements prometheus.Collector.
+// Exporter collects GaussDB metrics. It implements prometheus.Collector.
 type Exporter struct {
 	// Holds a reference to the build in column mappings. Currently this is for testing purposes
 	// only, since it just points to the global.
@@ -507,7 +507,7 @@ func parseConstLabels(s string) prometheus.Labels {
 	return labels
 }
 
-// NewExporter returns a new PostgreSQL exporter for the provided DSN.
+// NewExporter returns a new GaussDB exporter for the provided DSN.
 func NewExporter(dsn []string, opts ...ExporterOpt) *Exporter {
 	e := &Exporter{
 		dsn:               dsn,
@@ -529,27 +529,27 @@ func (e *Exporter) setupInternalMetrics() {
 		Namespace:   namespace,
 		Subsystem:   exporter,
 		Name:        "last_scrape_duration_seconds",
-		Help:        "Duration of the last scrape of metrics from PostgreSQL.",
+		Help:        "Duration of the last scrape of metrics from GaussDB.",
 		ConstLabels: e.constantLabels,
 	})
 	e.totalScrapes = prometheus.NewCounter(prometheus.CounterOpts{
 		Namespace:   namespace,
 		Subsystem:   exporter,
 		Name:        "scrapes_total",
-		Help:        "Total number of times PostgreSQL was scraped for metrics.",
+		Help:        "Total number of times GaussDB was scraped for metrics.",
 		ConstLabels: e.constantLabels,
 	})
 	e.error = prometheus.NewGauge(prometheus.GaugeOpts{
 		Namespace:   namespace,
 		Subsystem:   exporter,
 		Name:        "last_scrape_error",
-		Help:        "Whether the last scrape of metrics from PostgreSQL resulted in an error (1 for error, 0 for success).",
+		Help:        "Whether the last scrape of metrics from GaussDB resulted in an error (1 for error, 0 for success).",
 		ConstLabels: e.constantLabels,
 	})
 	e.psqlUp = prometheus.NewGauge(prometheus.GaugeOpts{
 		Namespace:   namespace,
 		Name:        "up",
-		Help:        "Whether the last scrape of metrics from PostgreSQL was able to connect to the server (1 for yes, 0 for no).",
+		Help:        "Whether the last scrape of metrics from GaussDB was able to connect to the server (1 for yes, 0 for no).",
 		ConstLabels: e.constantLabels,
 	})
 	e.userQueriesError = prometheus.NewGaugeVec(prometheus.GaugeOpts{
@@ -653,7 +653,7 @@ func (e *Exporter) checkMapVersions(ch chan<- prometheus.Metric, server *Server)
 
 	// Output the version as a special metric only for master database
 	versionDesc := prometheus.NewDesc(fmt.Sprintf("%s_%s", namespace, staticLabelName),
-		"Version string as reported by postgres", []string{"version", "short_version"}, server.labels)
+		"Version string as reported by gaussdb", []string{"version", "short_version"}, server.labels)
 
 	if !e.disableDefaultMetrics && server.master {
 		ch <- prometheus.MustNewConstMetric(versionDesc,

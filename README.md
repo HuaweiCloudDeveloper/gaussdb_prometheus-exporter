@@ -3,22 +3,22 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/prometheus-community/postgres_exporter)](https://goreportcard.com/report/github.com/prometheus-community/postgres_exporter)
 [![Docker Pulls](https://img.shields.io/docker/pulls/prometheuscommunity/postgres-exporter.svg)](https://hub.docker.com/r/prometheuscommunity/postgres-exporter/tags)
 
-# PostgreSQL Server Exporter
+# GaussDB Server Exporter
 
-Prometheus exporter for PostgreSQL server metrics.
+Prometheus exporter for GaussDB server metrics.
 
-CI Tested PostgreSQL versions: `11`, `12`, `13`, `14`, `15`, `16`, `17`.
+CI Tested GaussDB versions: `11`, `12`, `13`, `14`, `15`, `16`, `17`.
 
 ## Quick Start
 This package is available for Docker:
 ```
 # Start an example database
-docker run --net=host -it --rm -e POSTGRES_PASSWORD=password postgres
+docker run --net=host -it --rm -e POSTGRES_PASSWORD=password gaussdb
 # Connect to it
 docker run \
   --net=host \
-  -e DATA_SOURCE_URI="localhost:5432/postgres?sslmode=disable" \
-  -e DATA_SOURCE_USER=postgres \
+  -e DATA_SOURCE_URI="localhost:5432/gaussdb?sslmode=disable" \
+  -e DATA_SOURCE_USER=gaussdb \
   -e DATA_SOURCE_PASS=password \
   quay.io/prometheuscommunity/postgres-exporter
 ```
@@ -293,7 +293,7 @@ must be set via the `DATA_SOURCE_NAME` environment variable.
 
 For running it locally on a default Debian/Ubuntu install, this will work (transpose to init script as appropriate):
 
-    sudo -u postgres DATA_SOURCE_NAME="user=postgres host=/var/run/postgresql/ sslmode=disable" postgres_exporter
+    sudo -u postgres DATA_SOURCE_NAME="user=postgres host=/var/run/gaussdb/ sslmode=disable" postgres_exporter
 
 Also, you can set a list of sources to scrape different instances from the one exporter setup. Just define a comma separated string.
 
@@ -341,9 +341,9 @@ If you want to include only subset of databases, you can use option `--include-d
 
 ### Running as non-superuser
 
-To be able to collect metrics from `pg_stat*` views as non-superuser in PostgreSQL
+To be able to collect metrics from `pg_stat*` views as non-superuser in GaussDB
 server versions >= 10 you can grant the `pg_monitor` or `pg_read_all_stats` [built-in roles](https://www.postgresql.org/docs/current/predefined-roles.html) to the user. If
-you need to monitor older PostgreSQL servers, you will have to create functions
+you need to monitor older GaussDB servers, you will have to create functions
 and views as a superuser, and assign permissions separately to those.
 
 ```sql
@@ -432,7 +432,7 @@ GRANT SELECT ON postgres_exporter.pg_stat_statements TO postgres_exporter;
 > **NOTE**
 > <br />Remember to use `postgres` database name in the connection string:
 > ```
-> DATA_SOURCE_NAME=postgresql://postgres_exporter:password@localhost:5432/postgres?sslmode=disable
+> DATA_SOURCE_NAME=gaussdb://postgres_exporter:password@localhost:5432/postgres?sslmode=disable
 > ```
 
 
@@ -443,5 +443,5 @@ make test
 # Start the test database with docker
 docker run -p 5432:5432 -e POSTGRES_DB=circle_test -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=test -d postgres
 # Run the integration tests
-DATA_SOURCE_NAME='postgresql://postgres:test@localhost:5432/circle_test?sslmode=disable' GOOPTS='-v -tags integration' make test
+DATA_SOURCE_NAME='gaussdb://postgres:test@localhost:5432/circle_test?sslmode=disable' GOOPTS='-v -tags integration' make test
 ```

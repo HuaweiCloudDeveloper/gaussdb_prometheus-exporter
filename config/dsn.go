@@ -65,7 +65,7 @@ func (d DSN) GetConnectionString() string {
 // dsnFromString parses a connection string into a dsn. It will attempt to parse the string as
 // a URL and as a set of key=value pairs. If both attempts fail, dsnFromString will return an error.
 func dsnFromString(in string) (DSN, error) {
-	if strings.HasPrefix(in, "postgresql://") || strings.HasPrefix(in, "postgres://") {
+	if strings.HasPrefix(in, "gaussdb://") {
 		return dsnFromURL(in)
 	}
 
@@ -76,7 +76,7 @@ func dsnFromString(in string) (DSN, error) {
 	}
 
 	// Parse the string as a URL, with the scheme prefixed
-	d, err = dsnFromURL(fmt.Sprintf("postgresql://%s", in))
+	d, err = dsnFromURL(fmt.Sprintf("gaussdb://%s", in))
 	if err == nil {
 		return d, nil
 	}
@@ -139,7 +139,7 @@ func dsnFromKeyValue(in string) (DSN, error) {
 
 	// Build the dsn from the key=value pairs
 	d := DSN{
-		scheme: "postgresql",
+		scheme: "gaussdb",
 	}
 
 	hostname := ""

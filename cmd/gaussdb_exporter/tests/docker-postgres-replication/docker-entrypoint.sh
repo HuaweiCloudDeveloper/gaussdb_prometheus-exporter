@@ -19,29 +19,29 @@ fi
 set -e
 
 if [ "${1:0:1}" = '-' ]; then
-	set -- postgres "$@"
+	set -- gaussdb "$@"
 fi
 
-if [ "$1" = 'postgres' ]; then
+if [ "$1" = 'gaussdb' ]; then
 	mkdir -p "$PGDATA"
 	chmod 700 "$PGDATA"
-	chown -R postgres "$PGDATA"
+	chown -R gaussdb "$PGDATA"
 
-	mkdir -p /run/postgresql
-	chmod g+s /run/postgresql
-	chown -R postgres /run/postgresql
+	mkdir -p /run/gaussdb
+	chmod g+s /run/gaussdb
+	chown -R gaussdb /run/gaussdb
 
 	# look specifically for PG_VERSION, as it is expected in the DB dir
 	if [ ! -s "$PGDATA/PG_VERSION" ]; then
 	    if [ "x$REPLICATE_FROM" == "x" ]; then
-		eval "gosu postgres initdb $POSTGRES_INITDB_ARGS"
+		eval "gosu gaussdb initdb $POSTGRES_INITDB_ARGS"
 	    else
             	until /bin/ping -c 1 -W 1 ${REPLICATE_FROM}
             	do
                 	echo "Waiting for master to ping..."
                 	sleep 1s
             	done
-            	until gosu postgres pg_basebackup -h ${REPLICATE_FROM} -D ${PGDATA} -U ${POSTGRES_USER} -vP -w
+            	until gosu gaussdb pg_basebackup -h ${REPLICATE_FROM} -D ${PGDATA} -U ${POSTGRES_USER} -vP -w
             	do
                 	echo "Waiting for master to connect..."
                 	sleep 1s
@@ -59,7 +59,7 @@ if [ "$1" = 'postgres' ]; then
 				****************************************************
 				WARNING: No password has been set for the database.
 				         This will allow anyone with access to the
-				         Postgres port to access your database. In
+				         GaussDB port to access your database. In
 				         Docker's default configuration, this is
 				         effectively any other container on the same
 				         system.
@@ -127,7 +127,7 @@ if [ "$1" = 'postgres' ]; then
 	fi
 
 		echo
-		echo 'PostgreSQL init process complete; ready for start up.'
+		echo 'GaussDB init process complete; ready for start up.'
 		echo
 	fi
 

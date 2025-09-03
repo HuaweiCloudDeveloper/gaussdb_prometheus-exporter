@@ -11,5 +11,5 @@ exclusions:
   alert-name-camelcase:
     reason: QPS is a common acronym (Queries Per Second) and should be allowed
     entries:
-      - alert: PostgreSQLQPS
+      - alert: GaussDBQPS
     

@@ -24,7 +24,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-// Server describes a connection to Postgres.
+// Server describes a connection to GaussDB.
 // Also it contains metrics map and query overrides.
 type Server struct {
 	db          *sql.DB
@@ -97,7 +97,7 @@ func NewServer(dsn string, opts ...ServerOpt) (*Server, error) {
 	return s, nil
 }
 
-// Close disconnects from Postgres.
+// Close disconnects from GaussDB.
 func (s *Server) Close() error {
 	return s.db.Close()
 }
@@ -144,14 +144,14 @@ func (s *Server) Scrape(ch chan<- prometheus.Metric, disableSettingsMetrics bool
 	return err
 }
 
-// Servers contains a collection of servers to Postgres.
+// Servers contains a collection of servers to GaussDB.
 type Servers struct {
 	m       sync.Mutex
 	servers map[string]*Server
 	opts    []ServerOpt
 }
 
-// NewServers creates a collection of servers to Postgres.
+// NewServers creates a collection of servers to GaussDB.
 func NewServers(opts ...ServerOpt) *Servers {
 	return &Servers{
 		servers: make(map[string]*Server),

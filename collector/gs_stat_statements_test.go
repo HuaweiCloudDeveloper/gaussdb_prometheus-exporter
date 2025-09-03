@@ -35,7 +35,7 @@ func TestPGStateStatementsCollector(t *testing.T) {
 
 	columns := []string{"user", "datname", "queryid", "calls_total", "seconds_total", "rows_total", "block_read_seconds_total", "block_write_seconds_total"}
 	rows := sqlmock.NewRows(columns).
-		AddRow("postgres", "postgres", 1500, 5, 0.4, 100, 0.1, 0.2)
+		AddRow("gaussdb", "gaussdb", 1500, 5, 0.4, 100, 0.1, 0.2)
 	mock.ExpectQuery(sanitizeQuery(fmt.Sprintf(pgStatStatementsQuery, ""))).WillReturnRows(rows)
 
 	ch := make(chan prometheus.Metric)
@@ -49,10 +49,10 @@ func TestPGStateStatementsCollector(t *testing.T) {
 	}()
 
 	expected := []MetricResult{
-		{labels: labelMap{"user": "postgres", "datname": "postgres", "queryid": "1500"}, metricType: dto.MetricType_COUNTER, value: 5},
-		{labels: labelMap{"user": "postgres", "datname": "postgres", "queryid": "1500"}, metricType: dto.MetricType_COUNTER, value: 0.4},
-		{labels: labelMap{"user": "postgres", "datname": "postgres", "queryid": "1500"}, metricType: dto.MetricType_COUNTER, value: 100},
-		{labels: labelMap{"user": "postgres", "datname": "postgres", "queryid": "1500"}, metricType: dto.MetricType_COUNTER, value: 0.1},
+		{labels: labelMap{"user": "gaussdb", "datname": "gaussdb", "queryid": "1500"}, metricType: dto.MetricType_COUNTER, value: 5},
+		{labels: labelMap{"user": "gaussdb", "datname": "gaussdb", "queryid": "1500"}, metricType: dto.MetricType_COUNTER, value: 0.4},
+		{labels: labelMap{"user": "gaussdb", "datname": "gaussdb", "queryid": "1500"}, metricType: dto.MetricType_COUNTER, value: 100},
+		{labels: labelMap{"user": "gaussdb", "datname": "postgres", "queryid": "1500"}, metricType: dto.MetricType_COUNTER, value: 0.1},
 		{labels: labelMap{"user": "postgres", "datname": "postgres", "queryid": "1500"}, metricType: dto.MetricType_COUNTER, value: 0.2},
 	}
 

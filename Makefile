@@ -7,4 +7,4 @@ DOCKER_REPO  ?= prometheuscommunity
 
 include Makefile.common
 
-DOCKER_IMAGE_NAME       ?= postgres-exporter
+DOCKER_IMAGE_NAME       ?= gaussdb-exporter

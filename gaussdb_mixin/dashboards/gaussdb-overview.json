@@ -21,7 +21,7 @@
       }
     ]
   },
-  "description": "Performance metrics for Postgres",
+  "description": "Performance metrics for GaussDB",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "gnetId": 455,
@@ -1313,7 +1313,7 @@
   "schemaVersion": 38,
   "style": "dark",
   "tags": [
-    "postgres"
+    "gaussdb"
   ],
   "templating": {
     "list": [

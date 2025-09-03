@@ -28,7 +28,7 @@ var (
 	configReloadSuccess = promauto.NewGauge(prometheus.GaugeOpts{
 		Namespace: "gaussdb_exporter",
 		Name:      "config_last_reload_successful",
-		Help:      "Postgres exporter config loaded successfully.",
+		Help:      "GaussDB exporter config loaded successfully.",
 	})
 
 	configReloadSeconds = promauto.NewGauge(prometheus.GaugeOpts{

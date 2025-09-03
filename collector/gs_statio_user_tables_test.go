@@ -75,7 +75,7 @@ func TestPGStatIOUserTablesCollector(t *testing.T) {
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 5},
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 6},
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 7},
-		{labels: labelMap{"datname": "postgres", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 8},
+		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 8},
 	}
 
 	convey.Convey("Metrics comparison", t, func() {

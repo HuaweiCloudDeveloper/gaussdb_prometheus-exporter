@@ -98,7 +98,7 @@ smoketest_gaussdb() {
     DATA_SOURCE_NAME="gaussdb://gaussdb:$POSTGRES_PASSWORD@$standalone_ip:5432/?sslmode=disable" $test_binary || exit $?
 
     # Extract a raw metric list.
-    DATA_SOURCE_NAME="gaussdb://postgres:$POSTGRES_PASSWORD@$standalone_ip:5432/?sslmode=disable" $postgres_exporter \
+    DATA_SOURCE_NAME="gaussdb://gaussdb:$POSTGRES_PASSWORD@$standalone_ip:5432/?sslmode=disable" $gaussdb_exporter \
         --log.level=debug --web.listen-address=:$exporter_port &
     exporter_pid=$!
     # shellcheck disable=SC2064
@@ -107,7 +107,7 @@ smoketest_gaussdb() {
 
     # Dump the metrics to a file.
     if ! wget -q -O - http://localhost:$exporter_port/metrics 1> "$METRICS_DIR/.metrics.single.$version.prom" ; then
-        echo "Failed on postgres $version (standalone $DOCKER_IMAGE)" 1>&2
+        echo "Failed on gaussdb $version (standalone $DOCKER_IMAGE)" 1>&2
         kill $exporter_pid
         exit 1
     fi
@@ -125,7 +125,7 @@ smoketest_gaussdb() {
     trap - EXIT INT TERM
     
     echo "#######################"
-    echo "Replicated Postgres $version"
+    echo "Replicated GaussDB $version"
     echo "#######################"
     old_pwd=$(pwd)
     cd docker-postgres-replication || exit 1
@@ -144,12 +144,12 @@ smoketest_gaussdb() {
     master_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$master_container")
     slave_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$slave_container")
     echo "Got master IP: $master_ip"
-    wait_for_postgres "$master_container" "$master_ip" 5432
-    wait_for_postgres "$slave_container" "$slave_ip" 5432
+    wait_for_gaussdb "$master_container" "$master_ip" 5432
+    wait_for_gaussdb "$slave_container" "$slave_ip" 5432
     
-    DATA_SOURCE_NAME="gaussdb://postgres:$POSTGRES_PASSWORD@$master_ip:5432/?sslmode=disable" $test_binary || exit $?
+    DATA_SOURCE_NAME="gaussdb://gaussdb:$POSTGRES_PASSWORD@$master_ip:5432/?sslmode=disable" $test_binary || exit $?
     
-    DATA_SOURCE_NAME="gaussdb://postgres:$POSTGRES_PASSWORD@$master_ip:5432/?sslmode=disable" $postgres_exporter \
+    DATA_SOURCE_NAME="gaussdb://gaussdb:$POSTGRES_PASSWORD@$master_ip:5432/?sslmode=disable" $postgres_exporter \
         --log.level=debug --web.listen-address=:$exporter_port &
     exporter_pid=$!
     # shellcheck disable=SC2064
@@ -157,7 +157,7 @@ smoketest_gaussdb() {
     wait_for_exporter
 
     if ! wget -q -O - http://localhost:$exporter_port/metrics 1> "$METRICS_DIR/.metrics.replicated.$version.prom" ; then
-        echo "Failed on postgres $version (replicated $DOCKER_IMAGE)" 1>&2
+        echo "Failed on gaussdb $version (replicated $DOCKER_IMAGE)" 1>&2
         exit 1
     fi
 

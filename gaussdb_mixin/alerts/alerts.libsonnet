@@ -1,1 +1,1 @@
-(import 'postgres.libsonnet')
+(import 'gaussdb.libsonnet')

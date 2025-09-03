@@ -1,4 +1,4 @@
-# Using Gaussdb-Exporter with AWS:RDS
+# Using GaussDB-Exporter with AWS:RDS
 
 ### When using gaussdb-exporter with Amazon Web Services' RDS, the
   rolname "rdsadmin" and datname "rdsadmin" must be excluded.

@@ -7,15 +7,15 @@
           {
             alert: 'GaussDBMaxConnectionsReached',
             annotations: {
-              description: '{{ $labels.instance }} is exceeding the currently configured maximum Postgres connection limit (current value: {{ $value }}s). Services may be degraded - please take immediate action (you probably need to increase max_connections in the Docker image and re-deploy).',
-              summary: 'Postgres connections count is over the maximum amount.',
+              description: '{{ $labels.instance }} is exceeding the currently configured maximum GaussDB connection limit (current value: {{ $value }}s). Services may be degraded - please take immediate action (you probably need to increase max_connections in the Docker image and re-deploy).',
+              summary: 'GaussDB connections count is over the maximum amount.',
             },
             expr: |||
-              sum by (%(agg)s) (pg_stat_activity_count{%(postgresExporterSelector)s})
+              sum by (%(agg)s) (pg_stat_activity_count{%(GaussDBExporterSelector)s})
               >=
-              sum by (%(agg)s) (pg_settings_max_connections{%(postgresExporterSelector)s})
+              sum by (%(agg)s) (pg_settings_max_connections{%(GaussDBExporterSelector)s})
               -
-              sum by (%(agg)s) (pg_settings_superuser_reserved_connections{%(postgresExporterSelector)s})
+              sum by (%(agg)s) (pg_settings_superuser_reserved_connections{%(gaussdbExporterSelector)s})
             ||| % $._config { agg: std.join(', ', $._config.groupLabels + $._config.instanceLabels) },
             'for': '1m',
             labels: {
@@ -25,16 +25,16 @@
           {
             alert: 'GaussDBHighConnections',
             annotations: {
-              description: '{{ $labels.instance }} is exceeding 80% of the currently configured maximum Postgres connection limit (current value: {{ $value }}s). Please check utilization graphs and confirm if this is normal service growth, abuse or an otherwise temporary condition or if new resources need to be provisioned (or the limits increased, which is mostly likely).',
-              summary: 'Postgres connections count is over 80% of maximum amount.',
+              description: '{{ $labels.instance }} is exceeding 80% of the currently configured maximum GaussDB connection limit (current value: {{ $value }}s). Please check utilization graphs and confirm if this is normal service growth, abuse or an otherwise temporary condition or if new resources need to be provisioned (or the limits increased, which is mostly likely).',
+              summary: 'GaussDB connections count is over 80% of maximum amount.',
             },
             expr: |||
-              sum by (%(agg)s) (pg_stat_activity_count{%(postgresExporterSelector)s})
+              sum by (%(agg)s) (pg_stat_activity_count{%(gaussdbExporterSelector)s})
               >
               (
-                sum by (%(agg)s) (pg_settings_max_connections{%(postgresExporterSelector)s})
+                sum by (%(agg)s) (pg_settings_max_connections{%(gaussdbExporterSelector)s})
                 -
-                sum by (%(agg)s) (pg_settings_superuser_reserved_connections{%(postgresExporterSelector)s})
+                sum by (%(agg)s) (pg_settings_superuser_reserved_connections{%(gaussdbExporterSelector)s})
               ) * 0.8
             ||| % $._config { agg: std.join(', ', $._config.groupLabels + $._config.instanceLabels) },
             'for': '10m',
@@ -48,7 +48,7 @@
               description: '{{ $labels.instance }} is rejecting query requests from the exporter, and thus probably not allowing DNS requests to work either. User services should not be effected provided at least 1 node is still alive.',
               summary: 'GaussDB is not processing queries.',
             },
-            expr: 'pg_up{%(postgresExporterSelector)s} != 1' % $._config,
+            expr: 'pg_up{%(gaussdbExporterSelector)s} != 1' % $._config,
             'for': '1m',
             labels: {
               severity: 'warning',
@@ -63,7 +63,7 @@
             expr: |||
               avg by (datname, %(agg)s) (
                 rate (
-                  pg_stat_activity_max_tx_duration{%(dbNameFilter)s, %(postgresExporterSelector)s}[2m]
+                  pg_stat_activity_max_tx_duration{%(dbNameFilter)s, %(gaussdbExporterSelector)s}[2m]
                 )
               ) > 2 * 60
             ||| % $._config { agg: std.join(', ', $._config.groupLabels + $._config.instanceLabels) },
@@ -81,11 +81,11 @@
             expr: |||
               avg by (datname, %(agg)s) (
                 irate(
-                  pg_stat_database_xact_commit{%(dbNameFilter)s, %(postgresExporterSelector)s}[5m]
+                  pg_stat_database_xact_commit{%(dbNameFilter)s, %(gaussdbExporterSelector)s}[5m]
                 )
                 +
                 irate(
-                  pg_stat_database_xact_rollback{%(dbNameFilter)s, %(postgresExporterSelector)s}[5m]
+                  pg_stat_database_xact_rollback{%(dbNameFilter)s, %(gaussdbExporterSelector)s}[5m]
                 )
               ) > 10000
             ||| % $._config { agg: std.join(', ', $._config.groupLabels + $._config.instanceLabels) },
@@ -102,15 +102,15 @@
             },
             expr: |||
               avg by (datname, %(agg)s) (
-                rate(pg_stat_database_blks_hit{%(dbNameFilter)s, %(postgresExporterSelector)s}[5m])
+                rate(pg_stat_database_blks_hit{%(dbNameFilter)s, %(gaussdbExporterSelector)s}[5m])
                 /
                 (
                   rate(
-                    pg_stat_database_blks_hit{%(dbNameFilter)s, %(postgresExporterSelector)s}[5m]
+                    pg_stat_database_blks_hit{%(dbNameFilter)s, %(gaussdbExporterSelector)s}[5m]
                   )
                   +
                   rate(
-                    pg_stat_database_blks_read{%(dbNameFilter)s, %(postgresExporterSelector)s}[5m]
+                    pg_stat_database_blks_read{%(dbNameFilter)s, %(gaussdbExporterSelector)s}[5m]
                   )
                 )
               ) < 0.98
@@ -121,7 +121,7 @@
             },
           },
           {
-            alert: 'PostgresHasTooManyRollbacks',
+            alert: 'GaussDBHasTooManyRollbacks',
             annotations: {
               description: 'GaussDB has too many rollbacks on {{ $labels.cluster }} for database {{ $labels.datname }} with a value of {{ $value }}',
               summary: 'GaussDB has too many rollbacks.',
@@ -137,7 +137,7 @@
             },
           },
           {
-            alert: 'PostgresHasHighDeadLocks',
+            alert: 'GaussDBHasHighDeadLocks',
             annotations: {
               description: 'GaussDB has too high deadlocks on {{ $labels.cluster }} for database {{ $labels.datname }} with a value of {{ $value }}',
               summary: 'GaussDB has high number of deadlocks.',
@@ -151,7 +151,7 @@
             },
           },
           {
-            alert: 'PostgresAcquiredTooManyLocks',
+            alert: 'GaussDBAcquiredTooManyLocks',
             annotations: {
               description: 'GaussDB has acquired too many locks on {{ $labels.cluster }} for database {{ $labels.datname }} with a value of {{ $value }}',
               summary: 'GaussDB has high number of acquired locks.',
@@ -171,7 +171,7 @@
             },
           },
           {
-            alert: 'PostgresReplicationLaggingMore1Hour',
+            alert: 'GaussDBReplicationLaggingMore1Hour',
             annotations: {
               description: '{{ $labels.instance }} replication lag exceeds 1 hour. Check for network issues or load imbalances.',
               summary: 'GaussDB replication lagging more than 1 hour.',
@@ -185,7 +185,7 @@
             },
           },
           {
-            alert: 'PostgresHasReplicationSlotUsed',
+            alert: 'GaussDBHasReplicationSlotUsed',
             annotations: {
               description: '{{ $labels.instance }} has replication slots that are not used, which might lead to replication lag or data inconsistency.',
               summary: 'GaussDB has unused replication slots.',
@@ -197,7 +197,7 @@
             },
           },
           {
-            alert: 'PostgresReplicationRoleChanged',
+            alert: 'GaussDBReplicationRoleChanged',
             annotations: {
               description: '{{ $labels.instance }} replication role has changed. Verify if this is expected or if it indicates a failover.',
               summary: 'GaussDB replication role change detected.',
@@ -208,7 +208,7 @@
             },
           },
           {
-            alert: 'PostgresHasExporterErrors',
+            alert: 'GaussDBHasExporterErrors',
             annotations: {
               description: '{{ $labels.instance }} exporter is experiencing errors. Verify exporter health and configuration.',
               summary: 'GaussDB exporter errors detected.',
@@ -220,7 +220,7 @@
             },
           },
           {
-            alert: 'PostgresTablesNotVaccumed',
+            alert: 'GaussDBTablesNotVaccumed',
             annotations: {
               description: '{{ $labels.instance }} tables have not been vacuumed recently within the last hour, which may lead to performance degradation.',
               summary: 'GaussDB tables not vacuumed.',
@@ -242,7 +242,7 @@
             },
           },
           {
-            alert: 'PostgresTooManyCheckpointsRequested',
+            alert: 'GaussDBTooManyCheckpointsRequested',
             annotations: {
               description: '{{ $labels.instance }} is requesting too many checkpoints, which may lead to performance degradation.',
               summary: 'GaussDB too many checkpoints requested.',

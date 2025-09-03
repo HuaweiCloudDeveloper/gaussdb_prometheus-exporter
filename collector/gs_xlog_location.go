@@ -38,7 +38,7 @@ func NewPGXlogLocationCollector(config collectorConfig) (Collector, error) {
 var (
 	xlogLocationBytes = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, xlogLocationSubsystem, "bytes"),
-		"Postgres LSN (log sequence number) being generated on primary or replayed on replica (truncated to low 52 bits)",
+		"GaussDB LSN (log sequence number) being generated on primary or replayed on replica (truncated to low 52 bits)",
 		[]string{},
 		prometheus.Labels{},
 	)

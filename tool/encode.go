@@ -327,7 +327,7 @@ const (
 	infinityTsNegativeMustBeSmaller = "pq: infinity timestamp: negative value must be smaller (before) than positive"
 )
 
-// EnableInfinityTs controls the handling of Postgres' "-infinity" and
+// EnableInfinityTs controls the handling of GaussDB' "-infinity" and
 // "infinity" "timestamp"s.
 //
 // If EnableInfinityTs is not called, "-infinity" and "infinity" will return
@@ -336,7 +336,7 @@ const (
 // pair: []uint8 -> *time.Time", when scanning into a time.Time value.
 //
 // Once EnableInfinityTs has been called, all connections created using this
-// driver will decode Postgres' "-infinity" and "infinity" for "timestamp",
+// driver will decode GaussDB' "-infinity" and "infinity" for "timestamp",
 // "timestamp with time zone" and "date" types to the predefined minimum and
 // maximum times, respectively.  When encoding time.Time values, any time which
 // equals or precedes the predefined minimum time will be encoded to
@@ -366,10 +366,10 @@ func disableInfinityTs() {
 	infinityTsEnabled = false
 }
 
-// This is a time function specific to the Postgres default DateStyle
+// This is a time function specific to the GaussDB default DateStyle
 // setting ("ISO, MDY"), the only one we currently support. This
 // accounts for the discrepancies between the parsing available with
-// time.Parse and the Postgres date formatting quirks.
+// time.Parse and the GaussDB date formatting quirks.
 func parseTs(currentLocation *time.Location, str string) interface{} {
 	switch str {
 	case "-infinity":
@@ -390,10 +390,10 @@ func parseTs(currentLocation *time.Location, str string) interface{} {
 	return t
 }
 
-// ParseTimestamp parses Postgres' text format. It returns a time.Time in
+// ParseTimestamp parses GaussDB' text format. It returns a time.Time in
 // currentLocation iff that time's offset agrees with the offset sent from the
-// Postgres server. Otherwise, ParseTimestamp returns a time.Time with the
-// fixed offset offset provided by the Postgres server.
+// GaussDB server. Otherwise, ParseTimestamp returns a time.Time with the
+// fixed offset offset provided by the GaussDB server.
 func ParseTimestamp(currentLocation *time.Location, str string) (time.Time, error) {
 	p := timestampParser{}
 
@@ -503,7 +503,7 @@ func ParseTimestamp(currentLocation *time.Location, str string) (time.Time, erro
 	return t, p.err
 }
 
-// formatTs formats t into a format postgres understands.
+// formatTs formats t into a format GaussDB understands.
 func formatTs(t time.Time) []byte {
 	if infinityTsEnabled {
 		// t <= -infinity : ! (t > -infinity)
@@ -518,7 +518,7 @@ func formatTs(t time.Time) []byte {
 	return FormatTimestamp(t)
 }
 
-// FormatTimestamp formats t into Postgres' text format for timestamps.
+// FormatTimestamp formats t into GaussDB' text format for timestamps.
 func FormatTimestamp(t time.Time) []byte {
 	// Need to send dates before 0001 A.D. with " BC" suffix, instead of the
 	// minus sign preferred by Go.

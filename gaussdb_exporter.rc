@@ -20,7 +20,7 @@
 #               Default is "".
 # gaussdb_exporter_listen_address (string):Set ip:port to listen on for web interface and telemetry.
 #		Defaults to ":9187"
-# gaussdb_exporter_pg_user (string):	    Set the Gaussdb database user
+# gaussdb_exporter_gs_user (string):	    Set the Gaussdb database user
 #		Defaults to "gaussdb_exporter"
 # gaussdb_exporter_pg_pass (string):	    Set the Gaussdb datase password
 #		Default is empty

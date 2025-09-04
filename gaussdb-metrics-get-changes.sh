@@ -9,7 +9,7 @@ fi
 
 function generate_add_removed() {
     type="$1"
-    pg_version="$2"
+    gs_version="$2"
     old_version="$3"
     new_version="$4"
     

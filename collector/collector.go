@@ -36,7 +36,7 @@ var (
 
 const (
 	// Namespace for all metrics.
-	namespace = "pg"
+	namespace = "gs"
 
 	collectorFlagPrefix = "collector."
 	defaultEnabled      = true

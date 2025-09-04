@@ -30,11 +30,11 @@ var (
 	}
 )
 
-// Query the pg_settings view containing runtime variables
+// Query the gs_settings view containing runtime variables
 func querySettings(ch chan<- prometheus.Metric, server *Server) error {
-	logger.Debug("Querying pg_setting view", "server", server)
+	logger.Debug("Querying gs_setting view", "server", server)
 
-	// pg_settings docs: https://www.postgresql.org/docs/current/static/view-pg-settings.html
+	// gs_settings docs: https://www.postgresql.org/docs/current/static/view-pg-settings.html
 	//
 	// NOTE: If you add more vartypes here, you must update the supported
 	// types in normaliseUnit() below
@@ -47,7 +47,7 @@ func querySettings(ch chan<- prometheus.Metric, server *Server) error {
 	defer rows.Close() // nolint: errcheck
 
 	for rows.Next() {
-		s := &pgSetting{}
+		s := &gsSetting{}
 		err = rows.Scan(&s.name, &s.setting, &s.unit, &s.shortDesc, &s.vartype)
 		if err != nil {
 			return fmt.Errorf("Error retrieving rows on %q: %s %v", server, namespace, err)
@@ -59,14 +59,14 @@ func querySettings(ch chan<- prometheus.Metric, server *Server) error {
 	return nil
 }
 
-// pgSetting is represents a GaussDB runtime variable as returned by the
-// pg_settings view.
-type pgSetting struct {
+// gsSetting is represents a GaussDB runtime variable as returned by the
+// gs_settings view.
+type gsSetting struct {
 	name, setting /*unit,*/, shortDesc, vartype string
 	unit                                        sql.NullString
 }
 
-func (s *pgSetting) metric(labels prometheus.Labels) prometheus.Metric {
+func (s *gsSetting) metric(labels prometheus.Labels) prometheus.Metric {
 	var (
 		err       error
 		name      = strings.ReplaceAll(strings.ReplaceAll(s.name, ".", "_"), "-", "_")
@@ -104,7 +104,7 @@ func (s *pgSetting) metric(labels prometheus.Labels) prometheus.Metric {
 // Removes units from any of the setting values.
 // This is mostly because of a irregularity regarding AWS RDS Aurora
 // https://github.com/prometheus-community/postgres_exporter/issues/619
-func (s *pgSetting) sanitizeValue() {
+func (s *gsSetting) sanitizeValue() {
 	for _, unit := range settingUnits {
 		if strings.HasSuffix(s.setting, unit) {
 			endPos := len(s.setting) - len(unit) - 1
@@ -116,7 +116,7 @@ func (s *pgSetting) sanitizeValue() {
 
 // TODO: fix linter override
 // nolint: nakedret
-func (s *pgSetting) normaliseUnit() (val float64, unit string, err error) {
+func (s *gsSetting) normaliseUnit() (val float64, unit string, err error) {
 	s.sanitizeValue()
 
 	val, err = strconv.ParseFloat(s.setting, 64)

@@ -22,13 +22,13 @@ import (
 const walSubsystem = "wal"
 
 func init() {
-	registerCollector(walSubsystem, defaultEnabled, NewPGWALCollector)
+	registerCollector(walSubsystem, defaultEnabled, NewGSWALCollector)
 }
 
 type PGWALCollector struct {
 }
 
-func NewPGWALCollector(config collectorConfig) (Collector, error) {
+func NewGSWALCollector(config collectorConfig) (Collector, error) {
 	return &PGWALCollector{}, nil
 }
 

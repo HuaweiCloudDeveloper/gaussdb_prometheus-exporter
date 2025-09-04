@@ -50,7 +50,7 @@ wait_for_gaussdb(){
     local wait_start
     wait_start=$(date +%s) || exit 1
     echo "Waiting for gaussdb to start listening..."
-    while ! docker exec "$container" pg_isready --host="$ip" --port="$port" &> /dev/null; do
+    while ! docker exec "$container" gs_isready --host="$ip" --port="$port" &> /dev/null; do
         if [ $(( $(date +%s) - wait_start )) -gt "$TIMEOUT" ]; then
             echo "Timed out waiting for gaussdb to start!" 1>&2
             exit 1            
@@ -112,9 +112,9 @@ smoketest_gaussdb() {
         exit 1
     fi
 
-    # HACK test: check pg_up is a 1 - TODO: expand integration tests to include metric consumption
-    if ! grep 'pg_up.* 1' $METRICS_DIR/.metrics.single.$version.prom ; then
-        echo "pg_up metric was not 1 despite exporter and database being up"
+    # HACK test: check gs_up is a 1 - TODO: expand integration tests to include metric consumption
+    if ! grep 'gs_up.* 1' $METRICS_DIR/.metrics.single.$version.prom ; then
+        echo "gs_up metric was not 1 despite exporter and database being up"
         kill $exporter_pid
         exit 1
     fi
@@ -139,8 +139,8 @@ smoketest_gaussdb() {
     echo "Compose Cmd: $compose_cmd"
     eval "$compose_cmd"
     
-    master_container=$(docker-compose ps -q pg-master)
-    slave_container=$(docker-compose ps -q pg-slave)
+    master_container=$(docker-compose ps -q gs-master)
+    slave_container=$(docker-compose ps -q gs-slave)
     master_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$master_container")
     slave_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$slave_container")
     echo "Got master IP: $master_ip"

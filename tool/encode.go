@@ -43,20 +43,20 @@ func binaryEncode(parameterStatus *parameterStatus, x interface{}) []byte {
 	}
 }
 
-func encode(parameterStatus *parameterStatus, x interface{}, pgtypOid oid.Oid) []byte {
+func encode(parameterStatus *parameterStatus, x interface{}, gstypOid oid.Oid) []byte {
 	switch v := x.(type) {
 	case int64:
 		return strconv.AppendInt(nil, v, 10)
 	case float64:
 		return strconv.AppendFloat(nil, v, 'f', -1, 64)
 	case []byte:
-		if pgtypOid == oid.T_bytea {
+		if gstypOid == oid.T_bytea {
 			return encodeBytea(parameterStatus.serverVersion, v)
 		}
 
 		return v
 	case string:
-		if pgtypOid == oid.T_bytea {
+		if gstypOid == oid.T_bytea {
 			return encodeBytea(parameterStatus.serverVersion, []byte(v))
 		}
 

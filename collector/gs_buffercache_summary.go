@@ -28,13 +28,13 @@ func init() {
 	registerCollector(buffercacheSummarySubsystem, defaultDisabled, NewBuffercacheSummaryCollector)
 }
 
-// BuffercacheSummaryCollector collects stats from pg_buffercache: https://www.postgresql.org/docs/current/pgbuffercache.html.
+// BuffercacheSummaryCollector collects stats from gs_buffercache: https://www.postgresql.org/docs/current/pgbuffercache.html.
 //
 // It depends on the extension being loaded with
 //
-//	create extension pg_buffercache;
+//	create extension gs_buffercache;
 //
-// It does not take locks, see the PG docs above.
+// It does not take locks, see the GS docs above.
 type BuffercacheSummaryCollector struct {
 	log *slog.Logger
 }
@@ -92,7 +92,7 @@ var (
 // Update implements Collector
 // It is called by the Prometheus registry when collecting metrics.
 func (c BuffercacheSummaryCollector) Update(ctx context.Context, instance *instance, ch chan<- prometheus.Metric) error {
-	// pg_buffercache_summary is only in v16, and we don't need support for earlier currently.
+	// gs_buffercache_summary is only in v16, and we don't need support for earlier currently.
 	if !instance.version.GE(semver.MustParse("16.0.0")) {
 		return nil
 	}

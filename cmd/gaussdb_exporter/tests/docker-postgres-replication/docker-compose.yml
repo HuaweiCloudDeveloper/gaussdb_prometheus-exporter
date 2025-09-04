@@ -2,31 +2,31 @@
 version: '2'
 
 services:
-  pg-master:
+  gs-master:
     build: '.'
     image: 'danieldent/postgres-replication'
     restart: 'always'
     environment:
       POSTGRES_USER: 'gaussdb'
       POSTGRES_PASSWORD: 'gaussdb'
-      PGDATA: '/var/lib/gaussdb/data/pgdata'
+      GSDATA: '/var/lib/gaussdb/data/gsdata'
     volumes:
       - '/var/lib/gaussdb/data'
     expose:
       - '5432'
 
-  pg-slave:
+  gs-slave:
     build: '.'
     image: 'danieldent/postgres-replication'
     restart: 'always'
     environment:
       POSTGRES_USER: 'gaussdb'
       POSTGRES_PASSWORD: 'gaussdb'
-      PGDATA: '/var/lib/gaussdb/data/pgdata'
-      REPLICATE_FROM: 'pg-master'
+      GSDATA: '/var/lib/gaussdb/data/gsdata'
+      REPLICATE_FROM: 'gs-master'
     volumes:
       - '/var/lib/gaussdb/data'
     expose:
       - '5432'
     links:
-      - 'pg-master'
+      - 'gs-master'

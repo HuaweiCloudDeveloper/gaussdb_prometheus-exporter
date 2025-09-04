@@ -70,7 +70,7 @@ type MappingOptions struct {
 	Usage             string             `yaml:"usage"`
 	Description       string             `yaml:"description"`
 	Mapping           map[string]float64 `yaml:"metric_mapping"` // Optional column mapping for MAPPEDMETRIC
-	SupportedVersions semver.Range       `yaml:"pg_version"`     // Semantic version ranges which are supported. Unsupported columns are not queried (internally converted to DISCARD).
+	SupportedVersions semver.Range       `yaml:"gs_version"`     // Semantic version ranges which are supported. Unsupported columns are not queried (internally converted to DISCARD).
 }
 
 // Mapping represents a set of MappingOptions
@@ -96,7 +96,7 @@ type ColumnMapping struct {
 	usage             ColumnUsage        `yaml:"usage"`
 	description       string             `yaml:"description"`
 	mapping           map[string]float64 `yaml:"metric_mapping"` // Optional column mapping for MAPPEDMETRIC
-	supportedVersions semver.Range       `yaml:"pg_version"`     // Semantic version ranges which are supported. Unsupported columns are not queried (internally converted to DISCARD).
+	supportedVersions semver.Range       `yaml:"gs_version"`     // Semantic version ranges which are supported. Unsupported columns are not queried (internally converted to DISCARD).
 }
 
 // UnmarshalYAML implements yaml.Unmarshaller
@@ -128,10 +128,10 @@ type MetricMap struct {
 	histogram  bool                              // Should metric be treated as a histogram?
 	vtype      prometheus.ValueType              // Prometheus valuetype
 	desc       *prometheus.Desc                  // Prometheus descriptor
-	conversion func(interface{}) (float64, bool) // Conversion function to turn PG result into float64
+	conversion func(interface{}) (float64, bool) // Conversion function to turn GS result into float64
 }
 
-// ErrorConnectToServer is a connection to PgSQL server error
+// ErrorConnectToServer is a connection to GsSQL server error
 type ErrorConnectToServer struct {
 	Msg string
 }
@@ -263,13 +263,13 @@ var builtinMetricMaps = map[string]intermediateMetricMap{
 }
 
 // Turn the MetricMap column mapping into a prometheus descriptor mapping.
-func makeDescMap(pgVersion semver.Version, serverLabels prometheus.Labels, metricMaps map[string]intermediateMetricMap) map[string]MetricMapNamespace {
+func makeDescMap(gsVersion semver.Version, serverLabels prometheus.Labels, metricMaps map[string]intermediateMetricMap) map[string]MetricMapNamespace {
 	var metricMap = make(map[string]MetricMapNamespace)
 
 	for namespace, intermediateMappings := range metricMaps {
 		thisMap := make(map[string]MetricMap)
 
-		namespace = strings.Replace(namespace, "pg", *metricPrefix, 1)
+		namespace = strings.Replace(namespace, "gs", *metricPrefix, 1)
 
 		// Get the constant labels
 		var variableLabels []string
@@ -283,7 +283,7 @@ func makeDescMap(pgVersion semver.Version, serverLabels prometheus.Labels, metri
 			// Check column version compatibility for the current map
 			// Force to discard if not compatible.
 			if columnMapping.supportedVersions != nil {
-				if !columnMapping.supportedVersions(pgVersion) {
+				if !columnMapping.supportedVersions(gsVersion) {
 					// It's very useful to be able to see what columns are being
 					// rejected.
 					logger.Debug("Column is being forced to discard due to version incompatibility", "column", columnName)
@@ -437,7 +437,7 @@ func DisableDefaultMetrics(b bool) ExporterOpt {
 	}
 }
 
-// DisableSettingsMetrics configures pg_settings export.
+// DisableSettingsMetrics configures gs_settings export.
 func DisableSettingsMetrics(b bool) ExporterOpt {
 	return func(e *Exporter) {
 		e.disableSettingsMetrics = b

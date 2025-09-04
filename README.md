@@ -194,7 +194,7 @@ This will build the docker image as `prometheuscommunity/gaussdb_exporter:${bran
   Use only metrics supplied from `queries.yaml` via `--extend.query-path`.  Default is `false`.
 
 * `disable-settings-metrics`
-  Use the flag if you don't want to scrape `pg_settings`.  Default is `false`.
+  Use the flag if you don't want to scrape `gs_settings`.  Default is `false`.
 
 * `auto-discover-databases` (DEPRECATED)
   Whether to discover the databases on a server dynamically.  Default is `false`.
@@ -235,7 +235,7 @@ The following environment variables configure the exporter:
 
 * `DATA_SOURCE_URI`
    an alternative to `DATA_SOURCE_NAME` which exclusively accepts the hostname
-   without a username and password component. For example, `my_pg_hostname` or
+   without a username and password component. For example, `my_gs_hostname` or
    `my_pg_hostname:5432/gaussdb?sslmode=disable`.
 
 * `DATA_SOURCE_URI_FILE`
@@ -282,9 +282,9 @@ The following environment variables configure the exporter:
   means allow all.
 
 * `PG_EXPORTER_METRIC_PREFIX`
-  A prefix to use for each of the default metrics exported by gaussdb-exporter. Default is `pg`
+  A prefix to use for each of the default metrics exported by gaussdb-exporter. Default is `gs`
 
-Settings set by environment variables starting with `PG_` will be overwritten by the corresponding CLI flag if given.
+Settings set by environment variables starting with `GS_` will be overwritten by the corresponding CLI flag if given.
 
 ### Setting the GaussDB server's data source name
 

@@ -49,6 +49,7 @@ func TestPGStatUserTablesCollector(t *testing.T) {
 		t.Fatalf("Error parsing vacuum time: %s", err)
 	}
 
+	// "n_mod_since_analyze",
 	columns := []string{
 		"datname",
 		"schemaname",
@@ -63,7 +64,7 @@ func TestPGStatUserTablesCollector(t *testing.T) {
 		"n_tup_hot_upd",
 		"n_live_tup",
 		"n_dead_tup",
-		"n_mod_since_analyze",
+
 		"last_vacuum",
 		"last_autovacuum",
 		"last_analyze",
@@ -154,6 +155,7 @@ func TestPGStatUserTablesCollectorNullValues(t *testing.T) {
 
 	inst := &instance{db: db}
 
+	// "n_mod_since_analyze",
 	columns := []string{
 		"datname",
 		"schemaname",
@@ -168,7 +170,7 @@ func TestPGStatUserTablesCollectorNullValues(t *testing.T) {
 		"n_tup_hot_upd",
 		"n_live_tup",
 		"n_dead_tup",
-		"n_mod_since_analyze",
+
 		"last_vacuum",
 		"last_autovacuum",
 		"last_analyze",

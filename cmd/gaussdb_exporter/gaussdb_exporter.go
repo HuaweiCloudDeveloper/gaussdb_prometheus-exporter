@@ -252,7 +252,7 @@ var builtinMetricMaps = map[string]intermediateMetricMap{
 			"usename":          {LABEL, "connection usename", nil, nil},
 			"application_name": {LABEL, "connection application_name", nil, nil},
 			//"backend_type":     {LABEL, "connection backend_type", nil, nil},
-			"wait_event_type": {LABEL, "connection wait_event_type", nil, nil},
+			//"wait_event_type": {LABEL, "connection wait_event_type", nil, nil},
 			"wait_event":      {LABEL, "connection wait_event", nil, nil},
 			"count":           {GAUGE, "number of connections in this state", nil, nil},
 			"max_tx_duration": {GAUGE, "max duration in seconds any active transaction has been running", nil, nil},

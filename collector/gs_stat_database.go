@@ -249,9 +249,9 @@ func (c *PGStatDatabaseCollector) Update(ctx context.Context, instance *instance
 	}
 
 	activeTimeAvail := instance.version.GTE(semver.MustParse("14.0.0"))
-	if activeTimeAvail {
+	/*if activeTimeAvail {
 		columns = append(columns, "active_time")
-	}
+	}*/
 
 	rows, err := db.QueryContext(ctx,
 		statDatabaseQuery(columns),

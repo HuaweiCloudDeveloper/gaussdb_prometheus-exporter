@@ -113,6 +113,11 @@ var queryOverrides = map[string][]OverrideQuery{
 		// tmp2.wait_event_type,
 		// wait_event_type,
 		// wait_event_type,
+
+		// tmp2.wait_event,
+		// wait_event,
+		// ,wait_event
+
 		// This query only works
 		{
 			semver.MustParseRange(">=9.2.0"),
@@ -124,7 +129,7 @@ var queryOverrides = map[string][]OverrideQuery{
 				tmp2.application_name,
 				
 				
-				tmp2.wait_event,
+				
 				COALESCE(count,0) as count,
 				COALESCE(max_tx_duration,0) as max_tx_duration
 			FROM
@@ -145,11 +150,11 @@ var queryOverrides = map[string][]OverrideQuery{
 					application_name,
 					
 					
-					wait_event,
+					
 					count(*) AS count,
 					MAX(EXTRACT(EPOCH FROM now() - xact_start))::float AS max_tx_duration
 				FROM pg_stat_activity
-				GROUP BY datname,state,usename,application_name,wait_event) AS tmp2
+				GROUP BY datname,state,usename,application_name) AS tmp2
 				ON tmp.state = tmp2.state AND pg_database.datname = tmp2.datname
 			`,
 		},

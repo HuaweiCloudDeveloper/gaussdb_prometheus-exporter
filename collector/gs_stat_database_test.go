@@ -54,7 +54,7 @@ func TestPGStatDatabaseCollector(t *testing.T) {
 		"blk_read_time",
 		"blk_write_time",
 		"stats_reset",
-		"active_time",
+		//"active_time",
 	}
 
 	srT, err := time.Parse("2006-01-02 15:04:05.00000-07", "2023-05-25 17:10:42.81132-07")
@@ -165,7 +165,7 @@ func TestPGStatDatabaseCollectorNullValues(t *testing.T) {
 		"blk_read_time",
 		"blk_write_time",
 		"stats_reset",
-		"active_time",
+		//"active_time",
 	}
 
 	rows := sqlmock.NewRows(columns).
@@ -287,7 +287,7 @@ func TestPGStatDatabaseCollectorRowLeakTest(t *testing.T) {
 		"blk_read_time",
 		"blk_write_time",
 		"stats_reset",
-		"active_time",
+		//"active_time",
 	}
 
 	srT, err := time.Parse("2006-01-02 15:04:05.00000-07", "2023-05-25 17:10:42.81132-07")
@@ -456,7 +456,7 @@ func TestPGStatDatabaseCollectorTestNilStatReset(t *testing.T) {
 		"blk_read_time",
 		"blk_write_time",
 		"stats_reset",
-		"active_time",
+		//"active_time",
 	}
 
 	rows := sqlmock.NewRows(columns).

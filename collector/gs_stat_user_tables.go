@@ -96,12 +96,12 @@ var (
 		[]string{"datname", "schemaname", "relname"},
 		prometheus.Labels{},
 	)
-	statUserTablesNModSinceAnalyze = prometheus.NewDesc(
+	/*statUserTablesNModSinceAnalyze = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, userTableSubsystem, "n_mod_since_analyze"),
 		"Estimated number of rows changed since last analyze",
 		[]string{"datname", "schemaname", "relname"},
 		prometheus.Labels{},
-	)
+	)*/
 	statUserTablesLastVacuum = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, userTableSubsystem, "last_vacuum"),
 		"Last time at which this table was manually vacuumed (not counting VACUUM FULL)",
@@ -163,6 +163,7 @@ var (
 		prometheus.Labels{},
 	)
 
+	// n_mod_since_analyze,
 	statUserTablesQuery = `SELECT
 		current_database() datname,
 		schemaname,
@@ -177,7 +178,7 @@ var (
 		n_tup_hot_upd,
 		n_live_tup,
 		n_dead_tup,
-		n_mod_since_analyze,
+		
 		COALESCE(last_vacuum, '1970-01-01Z') as last_vacuum,
 		COALESCE(last_autovacuum, '1970-01-01Z') as last_autovacuum,
 		COALESCE(last_analyze, '1970-01-01Z') as last_analyze,
@@ -335,7 +336,7 @@ func (c *PGStatUserTablesCollector) Update(ctx context.Context, instance *instan
 			datnameLabel, schemanameLabel, relnameLabel,
 		)
 
-		nModSinceAnalyzeMetric := 0.0
+		/*nModSinceAnalyzeMetric := 0.0
 		if nModSinceAnalyze.Valid {
 			nModSinceAnalyzeMetric = float64(nModSinceAnalyze.Int64)
 		}
@@ -344,7 +345,7 @@ func (c *PGStatUserTablesCollector) Update(ctx context.Context, instance *instan
 			prometheus.GaugeValue,
 			nModSinceAnalyzeMetric,
 			datnameLabel, schemanameLabel, relnameLabel,
-		)
+		)*/
 
 		lastVacuumMetric := 0.0
 		if lastVacuum.Valid {

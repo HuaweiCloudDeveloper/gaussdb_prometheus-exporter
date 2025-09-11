@@ -94,7 +94,7 @@ var queryOverrides = map[string][]OverrideQuery{
 		},
 	},
 
-	"pg_stat_archiver": {
+	/*"pg_stat_archiver": {
 		{
 			semver.MustParseRange(">=9.4.0"),
 			`
@@ -103,7 +103,7 @@ var queryOverrides = map[string][]OverrideQuery{
 			FROM pg_stat_archiver
 			`,
 		},
-	},
+	},*/
 
 	"pg_stat_activity": {
 		// tmp2.backend_type,

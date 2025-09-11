@@ -231,7 +231,7 @@ var builtinMetricMaps = map[string]intermediateMetricMap{
 		true,
 		0,
 	},
-	"pg_stat_archiver": {
+	/*"pg_stat_archiver": {
 		map[string]ColumnMapping{
 			"archived_count":     {COUNTER, "Number of WAL files that have been successfully archived", nil, nil},
 			"last_archived_wal":  {DISCARD, "Name of the last WAL file successfully archived", nil, nil},
@@ -244,7 +244,7 @@ var builtinMetricMaps = map[string]intermediateMetricMap{
 		},
 		true,
 		0,
-	},
+	},*/
 	"pg_stat_activity": {
 		map[string]ColumnMapping{
 			"datname":          {LABEL, "Name of this database", nil, nil},

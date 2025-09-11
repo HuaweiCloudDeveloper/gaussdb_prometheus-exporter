@@ -97,7 +97,7 @@ var (
 
 	// This is the view definition of pg_stat_progress_vacuum, albeit without the conversion
 	// of "phase" to a human-readable string. We will prefer the numeric representation.
-	statProgressVacuumQuery = `SELECT
+	/*statProgressVacuumQuery = `SELECT
 		d.datname,
 		s.relid::regclass::text AS relname,
 		s.param1 AS phase,
@@ -111,7 +111,18 @@ var (
 		pg_stat_get_progress_info('VACUUM'::text)
 		s(pid, datid, relid, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14, param15, param16, param17, param18, param19, param20)
 	LEFT JOIN
-		pg_database d ON s.datid = d.oid`
+		pg_database d ON s.datid = d.oid`*/
+	statProgressVacuumQuery = `SELECT 
+    d.datname,
+    p.pid,
+    p.query,
+    p.state,
+    p.backend_start,
+    p.query_start
+FROM pg_stat_activity p
+LEFT JOIN pg_database d ON p.datid = d.oid
+WHERE p.query ILIKE '%VACUUM%' 
+   AND p.state = 'active'`
 )
 
 func (c *PGStatProgressVacuumCollector) Update(ctx context.Context, instance *instance, ch chan<- prometheus.Metric) error {

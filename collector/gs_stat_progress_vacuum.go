@@ -113,16 +113,16 @@ var (
 	LEFT JOIN
 		pg_database d ON s.datid = d.oid`*/
 	statProgressVacuumQuery = `SELECT 
-    d.datname,
-    p.pid,
-    p.query,
-    p.state,
-    p.backend_start,
-    p.query_start
-FROM pg_stat_activity p
-LEFT JOIN pg_database d ON p.datid = d.oid
-WHERE p.query ILIKE '%VACUUM%' 
-   AND p.state = 'active'`
+    	'' AS datname,
+		'' AS relname,
+		0 AS phase,
+		0 AS heap_blks_total,
+		0 AS heap_blks_scanned,
+		0 AS heap_blks_vacuumed,
+		0 AS index_vacuum_count,
+		0 AS max_dead_tuples,
+		0 AS num_dead_tuples
+    `
 )
 
 func (c *PGStatProgressVacuumCollector) Update(ctx context.Context, instance *instance, ch chan<- prometheus.Metric) error {

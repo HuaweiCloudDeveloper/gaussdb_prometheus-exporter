@@ -46,7 +46,7 @@ type OverrideQuery struct {
 // TODO: validate this is a closed set in tests, and there are no overlaps
 var queryOverrides = map[string][]OverrideQuery{
 	"pg_stat_replication": {
-		{
+		/*{
 			semver.MustParseRange(">=10.0.0"),
 			`
 			SELECT *,
@@ -55,7 +55,7 @@ var queryOverrides = map[string][]OverrideQuery{
 				(case pg_is_in_recovery() when 't' then pg_wal_lsn_diff(pg_last_wal_receive_lsn(), replay_lsn)::float else pg_wal_lsn_diff(pg_current_wal_lsn(), replay_lsn)::float end) AS pg_wal_lsn_diff
 			FROM pg_stat_replication
 			`,
-		},
+		},*/
 		{
 			semver.MustParseRange(">=9.2.0 <10.0.0"),
 			`
@@ -84,14 +84,14 @@ var queryOverrides = map[string][]OverrideQuery{
 			FROM pg_replication_slots
 			`,
 		},
-		{
+		/*{
 			semver.MustParseRange(">=10.0.0"),
 			`
 			SELECT slot_name, database, active,
 				(case pg_is_in_recovery() when 't' then pg_wal_lsn_diff(pg_last_wal_receive_lsn(), restart_lsn) else pg_wal_lsn_diff(pg_current_wal_lsn(), restart_lsn) end) as pg_wal_lsn_diff
 			FROM pg_replication_slots
 			`,
-		},
+		},*/
 	},
 
 	/*"pg_stat_archiver": {

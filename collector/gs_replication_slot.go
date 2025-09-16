@@ -82,25 +82,31 @@ var (
 		"availability of WAL files claimed by this slot",
 		[]string{"slot_name", "slot_type", "wal_status"}, nil,
 	)
+
+	/*CASE WHEN pg_is_in_recovery() THEN
+	    pg_last_wal_receive_lsn() - '0/0'
+	ELSE
+	    pg_current_wal_lsn() - '0/0'
+	END */
 	pgReplicationSlotQuery = `SELECT
 		slot_name,
 		slot_type,
-		CASE WHEN pg_is_in_recovery() THEN
-		    pg_last_wal_receive_lsn() - '0/0'
-		ELSE
-		    pg_current_wal_lsn() - '0/0'
-		END AS current_wal_lsn,
+		'0/0'
+		AS current_wal_lsn,
 		COALESCE(confirmed_flush_lsn, '0/0') - '0/0' AS confirmed_flush_lsn,
 		active
 	FROM pg_replication_slots;`
+
+	/*CASE WHEN pg_is_in_recovery() THEN
+	pg_last_wal_receive_lsn() - '0/0'
+	ELSE
+	pg_current_wal_lsn() - '0/0'
+	END*/
 	pgReplicationSlotNewQuery = `SELECT
 		slot_name,
 		slot_type,
-		CASE WHEN pg_is_in_recovery() THEN
-		    pg_last_wal_receive_lsn() - '0/0'
-		ELSE
-		    pg_current_wal_lsn() - '0/0'
-		END AS current_wal_lsn,
+		'0/0'
+		AS current_wal_lsn,
 		COALESCE(confirmed_flush_lsn, '0/0') - '0/0' AS confirmed_flush_lsn,
 		active,
 		safe_wal_size,

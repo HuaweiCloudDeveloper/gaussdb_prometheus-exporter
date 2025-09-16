@@ -61,10 +61,11 @@ var (
 		[]string{}, nil,
 	)
 
+	// WHEN pg_last_wal_receive_lsn () = pg_last_wal_replay_lsn () THEN 0
 	pgReplicationQuery = `SELECT
 	CASE
 		WHEN NOT pg_is_in_recovery() THEN 0
-                WHEN pg_last_wal_receive_lsn () = pg_last_wal_replay_lsn () THEN 0
+                
 		ELSE GREATEST (0, EXTRACT(EPOCH FROM (now() - pg_last_xact_replay_timestamp())))
 	END AS lag,
 	CASE

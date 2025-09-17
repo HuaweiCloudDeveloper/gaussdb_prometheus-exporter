@@ -20,7 +20,6 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/blang/semver/v4"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -248,8 +247,8 @@ func (c *PGStatDatabaseCollector) Update(ctx context.Context, instance *instance
 		"stats_reset",
 	}
 
-	activeTimeAvail := instance.version.GTE(semver.MustParse("14.0.0"))
-	/*if activeTimeAvail {
+	/*activeTimeAvail := instance.version.GTE(semver.MustParse("14.0.0"))
+	if activeTimeAvail {
 		columns = append(columns, "active_time")
 	}*/
 
@@ -263,7 +262,8 @@ func (c *PGStatDatabaseCollector) Update(ctx context.Context, instance *instance
 
 	for rows.Next() {
 		var datid, datname sql.NullString
-		var numBackends, xactCommit, xactRollback, blksRead, blksHit, tupReturned, tupFetched, tupInserted, tupUpdated, tupDeleted, conflicts, tempFiles, tempBytes, deadlocks, blkReadTime, blkWriteTime, activeTime sql.NullFloat64
+		// , activeTime
+		var numBackends, xactCommit, xactRollback, blksRead, blksHit, tupReturned, tupFetched, tupInserted, tupUpdated, tupDeleted, conflicts, tempFiles, tempBytes, deadlocks, blkReadTime, blkWriteTime sql.NullFloat64
 		var statsReset sql.NullTime
 
 		r := []any{
@@ -288,9 +288,9 @@ func (c *PGStatDatabaseCollector) Update(ctx context.Context, instance *instance
 			&statsReset,
 		}
 
-		if activeTimeAvail {
+		/*if activeTimeAvail {
 			r = append(r, &activeTime)
-		}
+		}*/
 
 		err := rows.Scan(r...)
 		if err != nil {
@@ -369,10 +369,10 @@ func (c *PGStatDatabaseCollector) Update(ctx context.Context, instance *instance
 			c.log.Debug("Skipping collecting metric because it has no blk_write_time")
 			continue
 		}
-		if activeTimeAvail && !activeTime.Valid {
+		/*if activeTimeAvail && !activeTime.Valid {
 			c.log.Debug("Skipping collecting metric because it has no active_time")
 			continue
-		}
+		}*/
 
 		statsResetMetric := 0.0
 		if !statsReset.Valid {
@@ -503,14 +503,14 @@ func (c *PGStatDatabaseCollector) Update(ctx context.Context, instance *instance
 			labels...,
 		)
 
-		if activeTimeAvail {
+		/*if activeTimeAvail {
 			ch <- prometheus.MustNewConstMetric(
 				statDatabaseActiveTime,
 				prometheus.CounterValue,
 				activeTime.Float64/1000.0,
 				labels...,
 			)
-		}
+		}*/
 	}
 	return nil
 }

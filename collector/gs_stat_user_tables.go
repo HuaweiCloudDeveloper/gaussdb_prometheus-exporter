@@ -178,7 +178,7 @@ var (
 		n_tup_hot_upd,
 		n_live_tup,
 		n_dead_tup,
-		
+		0,
 		COALESCE(last_vacuum, '1970-01-01Z') as last_vacuum,
 		COALESCE(last_autovacuum, '1970-01-01Z') as last_autovacuum,
 		COALESCE(last_analyze, '1970-01-01Z') as last_analyze,

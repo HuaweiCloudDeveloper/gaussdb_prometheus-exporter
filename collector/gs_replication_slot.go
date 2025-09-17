@@ -88,6 +88,7 @@ var (
 	ELSE
 	    pg_current_wal_lsn() - '0/0'
 	END */
+	// COALESCE(confirmed_flush_lsn, '0/0') -
 	pgReplicationSlotQuery = `SELECT
 		slot_name,
 		slot_type,
@@ -102,12 +103,13 @@ var (
 	ELSE
 	pg_current_wal_lsn() - '0/0'
 	END*/
+	// COALESCE(confirmed_flush_lsn, '0/0') -
 	pgReplicationSlotNewQuery = `SELECT
 		slot_name,
 		slot_type,
 		'0/0'
 		AS current_wal_lsn,
-		COALESCE(confirmed_flush_lsn, '0/0') - '0/0' AS confirmed_flush_lsn,
+		'0/0' AS confirmed_flush_lsn,
 		active,
 		safe_wal_size,
 		wal_status

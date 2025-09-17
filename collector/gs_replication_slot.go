@@ -109,7 +109,7 @@ var (
 	pgReplicationSlotNewQuery = `SELECT
 		slot_name,
 		slot_type,
-		'0/0'
+		0
 		AS current_wal_lsn,
 		'0/0' AS confirmed_flush_lsn,
 		active,

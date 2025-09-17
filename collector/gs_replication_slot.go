@@ -94,7 +94,7 @@ var (
 		slot_type,
 		'0/0'
 		AS current_wal_lsn,
-		COALESCE(confirmed_flush_lsn, '0/0') - '0/0' AS confirmed_flush_lsn,
+		'0/0' AS confirmed_flush_lsn,
 		active
 	FROM pg_replication_slots;`
 

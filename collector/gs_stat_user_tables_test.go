@@ -234,7 +234,7 @@ func TestPGStatUserTablesCollectorNullValues(t *testing.T) {
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "unknown", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "unknown", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "unknown", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
-		//{labels: labelMap{"datname": "gaussdb", "schemaname": "unknown", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "schemaname": "unknown", "relname": "unknown"}, metricType: dto.MetricType_GAUGE, value: 0},
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "unknown", "relname": "unknown"}, metricType: dto.MetricType_COUNTER, value: 0},
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "unknown", "relname": "unknown"}, metricType: dto.MetricType_COUNTER, value: 0},
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "unknown", "relname": "unknown"}, metricType: dto.MetricType_COUNTER, value: 0},

@@ -49,7 +49,6 @@ func TestPGStatUserTablesCollector(t *testing.T) {
 		t.Fatalf("Error parsing vacuum time: %s", err)
 	}
 
-	// "n_mod_since_analyze",
 	columns := []string{
 		"datname",
 		"schemaname",
@@ -64,7 +63,7 @@ func TestPGStatUserTablesCollector(t *testing.T) {
 		"n_tup_hot_upd",
 		"n_live_tup",
 		"n_dead_tup",
-
+		"n_mod_since_analyze",
 		"last_vacuum",
 		"last_autovacuum",
 		"last_analyze",
@@ -137,8 +136,12 @@ func TestPGStatUserTablesCollector(t *testing.T) {
 
 	convey.Convey("Metrics comparison", t, func() {
 		for _, expect := range expected {
-			m := readMetric(<-ch)
-			convey.So(expect, convey.ShouldResemble, m)
+			m, ok := <-ch
+			if !ok {
+				break
+			}
+			result := readMetric(m)
+			convey.So(expect, convey.ShouldResemble, result)
 		}
 	})
 	if err := mock.ExpectationsWereMet(); err != nil {

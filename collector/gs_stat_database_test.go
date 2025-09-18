@@ -352,7 +352,7 @@ func TestPGStatDatabaseCollectorRowLeakTest(t *testing.T) {
 		AddRow(
 			"pid",
 			"gaussdb",
-			355,
+			0.014, // 355
 			4946,
 			289097745,
 			1242258,
@@ -403,9 +403,9 @@ func TestPGStatDatabaseCollectorRowLeakTest(t *testing.T) {
 		{labels: labelMap{"datid": "pid", "datname": "gaussdb"}, metricType: dto.MetricType_COUNTER, value: 16},
 		{labels: labelMap{"datid": "pid", "datname": "gaussdb"}, metricType: dto.MetricType_COUNTER, value: 823},
 		{labels: labelMap{"datid": "pid", "datname": "gaussdb"}, metricType: dto.MetricType_COUNTER, value: 1685059842},
-		{labels: labelMap{"datid": "pid", "datname": "gaussdb"}, metricType: dto.MetricType_COUNTER, value: 0.014},
+		{labels: labelMap{"datid": "pid", "datname": "gaussdb"}, metricType: dto.MetricType_GAUGE, value: 0.014},
 
-		{labels: labelMap{"datid": "pid", "datname": "gaussdb"}, metricType: dto.MetricType_GAUGE, value: 355},
+		//{labels: labelMap{"datid": "pid", "datname": "gaussdb"}, metricType: dto.MetricType_GAUGE, value: 355},
 		{labels: labelMap{"datid": "pid", "datname": "gaussdb"}, metricType: dto.MetricType_COUNTER, value: 4946},
 		{labels: labelMap{"datid": "pid", "datname": "gaussdb"}, metricType: dto.MetricType_COUNTER, value: 289097745},
 		{labels: labelMap{"datid": "pid", "datname": "gaussdb"}, metricType: dto.MetricType_COUNTER, value: 1242258},

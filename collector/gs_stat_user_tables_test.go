@@ -121,7 +121,7 @@ func TestPGStatUserTablesCollector(t *testing.T) {
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_COUNTER, value: 8},
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 9},
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 10},
-		//{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 0},
+		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 0},
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 1685664000},
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 1685750400},
 		{labels: labelMap{"datname": "gaussdb", "schemaname": "public", "relname": "a_table"}, metricType: dto.MetricType_GAUGE, value: 1685836800},

@@ -158,7 +158,6 @@ func TestPGStatUserTablesCollectorNullValues(t *testing.T) {
 
 	inst := &instance{db: db}
 
-	// "n_mod_since_analyze",
 	columns := []string{
 		"datname",
 		"schemaname",
@@ -173,7 +172,7 @@ func TestPGStatUserTablesCollectorNullValues(t *testing.T) {
 		"n_tup_hot_upd",
 		"n_live_tup",
 		"n_dead_tup",
-
+		"n_mod_since_analyze",
 		"last_vacuum",
 		"last_autovacuum",
 		"last_analyze",
@@ -246,8 +245,12 @@ func TestPGStatUserTablesCollectorNullValues(t *testing.T) {
 
 	convey.Convey("Metrics comparison", t, func() {
 		for _, expect := range expected {
-			m := readMetric(<-ch)
-			convey.So(expect, convey.ShouldResemble, m)
+			m, ok := <-ch
+			if !ok {
+				break
+			}
+			result := readMetric(m)
+			convey.So(expect, convey.ShouldResemble, result)
 		}
 	})
 	if err := mock.ExpectationsWereMet(); err != nil {

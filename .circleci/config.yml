@@ -35,7 +35,7 @@ jobs:
         type: string
 
     environment:
-      DATA_SOURCE_NAME: 'gaussdb://gaussdb:test@localhost:5432/circle_test?sslmode=disable'
+      DATA_SOURCE_NAME: 'gaussdb://gaussdb:Gaussdb@123!@localhost:5432/circle_test?sslmode=disable'
       GOOPTS: '-v -tags integration'
 
     steps:

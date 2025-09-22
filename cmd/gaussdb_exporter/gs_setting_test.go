@@ -17,6 +17,7 @@
 package main
 
 import (
+	"database/sql"
 	"github.com/prometheus/client_golang/prometheus"
 	dto "github.com/prometheus/client_model/go"
 	. "gopkg.in/check.v1"
@@ -24,7 +25,7 @@ import (
 
 type GsSettingSuite struct{}
 
-var _ = Suite(&gsSettingSuite{})
+var _ = Suite(&GsSettingSuite{})
 
 var fixtures = []fixture{
 	{
@@ -219,7 +220,7 @@ var fixtures = []fixture{
 	},
 }
 
-func (s *gsSettingSuite) TestNormaliseUnit(c *C) {
+func (s *GsSettingSuite) TestNormaliseUnit(c *C) {
 	for _, f := range fixtures {
 		switch f.p.vartype {
 		case "integer", "real":
@@ -237,7 +238,7 @@ func (s *gsSettingSuite) TestNormaliseUnit(c *C) {
 	}
 }
 
-func (s *gsSettingSuite) TestMetric(c *C) {
+func (s *GsSettingSuite) TestMetric(c *C) {
 	defer func() {
 		if r := recover(); r != nil {
 			if r.(error).Error() != `unknown unit for runtime variable: "nonexistent"` {

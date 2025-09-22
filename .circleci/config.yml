@@ -28,7 +28,7 @@ jobs:
       environment:
         GS_DB: circle_test
         GS_USER: gaussdb
-        GS_PASSWORD: test
+        GS_PASSWORD: Gaussdb@123!
 
     parameters:
       gaussdb_image:

@@ -77,8 +77,8 @@ type MappingOptions struct {
 type Mapping map[string]MappingOptions
 
 // Regex used to get the "short-version" from the GaussDB version field.
-var versionRegex = regexp.MustCompile(`GaussDB Kernel (\d+\.\d+\.\d+)`)
-var lowestSupportedVersion = semver.MustParse("505.0.0")
+var versionRegex = regexp.MustCompile(`(?:GaussDB Kernel|openGauss-lite) (\d+\.\d+\.\d+)`)
+var lowestSupportedVersion = semver.MustParse("7.0.0")
 
 // Parses the version of gaussdb into the short version string we can use to
 // match behaviors.

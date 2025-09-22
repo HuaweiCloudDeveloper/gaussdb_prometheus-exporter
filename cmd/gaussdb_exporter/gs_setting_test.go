@@ -22,16 +22,16 @@ import (
 	. "gopkg.in/check.v1"
 )
 
-type PgSettingSuite struct{}
+type GsSettingSuite struct{}
 
-var _ = Suite(&PgSettingSuite{})
+var _ = Suite(&gsSettingSuite{})
 
 var fixtures = []fixture{
 	{
-		p: pgSetting{
+		p: gsSetting{
 			name:      "seconds_fixture_metric",
 			setting:   "5",
-			unit:      "s",
+			unit:      sql.NullString{String: "s", Valid: true},
 			shortDesc: "Foo foo foo",
 			vartype:   "integer",
 		},
@@ -44,10 +44,10 @@ var fixtures = []fixture{
 		v: 5,
 	},
 	{
-		p: pgSetting{
+		p: gsSetting{
 			name:      "milliseconds_fixture_metric",
 			setting:   "5000",
-			unit:      "ms",
+			unit:      sql.NullString{String: "ms", Valid: true},
 			shortDesc: "Foo foo foo",
 			vartype:   "integer",
 		},
@@ -60,10 +60,10 @@ var fixtures = []fixture{
 		v: 5,
 	},
 	{
-		p: pgSetting{
+		p: gsSetting{
 			name:      "eight_kb_fixture_metric",
 			setting:   "17",
-			unit:      "8kB",
+			unit:      sql.NullString{String: "8kB", Valid: true},
 			shortDesc: "Foo foo foo",
 			vartype:   "integer",
 		},
@@ -76,10 +76,10 @@ var fixtures = []fixture{
 		v: 139264,
 	},
 	{
-		p: pgSetting{
+		p: gsSetting{
 			name:      "16_kb_real_fixture_metric",
 			setting:   "3.0",
-			unit:      "16kB",
+			unit:      sql.NullString{String: "16kB", Valid: true},
 			shortDesc: "Foo foo foo",
 			vartype:   "real",
 		},
@@ -92,10 +92,10 @@ var fixtures = []fixture{
 		v: 49152,
 	},
 	{
-		p: pgSetting{
+		p: gsSetting{
 			name:      "16_mb_real_fixture_metric",
 			setting:   "3.0",
-			unit:      "16MB",
+			unit:      sql.NullString{String: "16MB", Valid: true},
 			shortDesc: "Foo foo foo",
 			vartype:   "real",
 		},
@@ -108,10 +108,10 @@ var fixtures = []fixture{
 		v: 5.0331648e+07,
 	},
 	{
-		p: pgSetting{
+		p: gsSetting{
 			name:      "32_mb_real_fixture_metric",
 			setting:   "3.0",
-			unit:      "32MB",
+			unit:      sql.NullString{String: "32MB", Valid: true},
 			shortDesc: "Foo foo foo",
 			vartype:   "real",
 		},
@@ -124,10 +124,10 @@ var fixtures = []fixture{
 		v: 1.00663296e+08,
 	},
 	{
-		p: pgSetting{
+		p: gsSetting{
 			name:      "64_mb_real_fixture_metric",
 			setting:   "3.0",
-			unit:      "64MB",
+			unit:      sql.NullString{String: "64MB", Valid: true},
 			shortDesc: "Foo foo foo",
 			vartype:   "real",
 		},
@@ -140,10 +140,10 @@ var fixtures = []fixture{
 		v: 2.01326592e+08,
 	},
 	{
-		p: pgSetting{
+		p: gsSetting{
 			name:      "bool_on_fixture_metric",
 			setting:   "on",
-			unit:      "",
+			unit:      sql.NullString{String: "", Valid: true},
 			shortDesc: "Foo foo foo",
 			vartype:   "bool",
 		},
@@ -156,10 +156,10 @@ var fixtures = []fixture{
 		v: 1,
 	},
 	{
-		p: pgSetting{
+		p: gsSetting{
 			name:      "bool_off_fixture_metric",
 			setting:   "off",
-			unit:      "",
+			unit:      sql.NullString{String: "", Valid: true},
 			shortDesc: "Foo foo foo",
 			vartype:   "bool",
 		},
@@ -172,10 +172,10 @@ var fixtures = []fixture{
 		v: 0,
 	},
 	{
-		p: pgSetting{
+		p: gsSetting{
 			name:      "special_minus_one_value",
 			setting:   "-1",
-			unit:      "d",
+			unit:      sql.NullString{String: "d", Valid: true},
 			shortDesc: "foo foo foo",
 			vartype:   "integer",
 		},
@@ -188,10 +188,10 @@ var fixtures = []fixture{
 		v: -1,
 	},
 	{
-		p: pgSetting{
+		p: gsSetting{
 			name:      "rds.rds_superuser_reserved_connections",
 			setting:   "2",
-			unit:      "",
+			unit:      sql.NullString{String: "", Valid: true},
 			shortDesc: "Sets the number of connection slots reserved for rds_superusers.",
 			vartype:   "integer",
 		},
@@ -204,10 +204,10 @@ var fixtures = []fixture{
 		v: 2,
 	},
 	{
-		p: pgSetting{
+		p: gsSetting{
 			name:      "unknown_unit",
 			setting:   "10",
-			unit:      "nonexistent",
+			unit:      sql.NullString{String: "nonexistent", Valid: true},
 			shortDesc: "foo foo foo",
 			vartype:   "integer",
 		},
@@ -219,7 +219,7 @@ var fixtures = []fixture{
 	},
 }
 
-func (s *PgSettingSuite) TestNormaliseUnit(c *C) {
+func (s *gsSettingSuite) TestNormaliseUnit(c *C) {
 	for _, f := range fixtures {
 		switch f.p.vartype {
 		case "integer", "real":
@@ -237,7 +237,7 @@ func (s *PgSettingSuite) TestNormaliseUnit(c *C) {
 	}
 }
 
-func (s *PgSettingSuite) TestMetric(c *C) {
+func (s *gsSettingSuite) TestMetric(c *C) {
 	defer func() {
 		if r := recover(); r != nil {
 			if r.(error).Error() != `unknown unit for runtime variable: "nonexistent"` {
@@ -263,7 +263,7 @@ type normalised struct {
 }
 
 type fixture struct {
-	p pgSetting
+	p gsSetting
 	n normalised
 	d string
 	v float64

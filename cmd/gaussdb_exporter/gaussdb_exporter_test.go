@@ -195,16 +195,12 @@ func (s *FunctionalSuite) TestGaussDBVersionParsing(c *C) {
 
 	cases := []TestCase{
 		{
-			input:    "PostgreSQL 10.1 on x86_64-pc-linux-gnu, compiled by gcc (Debian 6.3.0-18) 6.3.0 20170516, 64-bit",
-			expected: "10.1.0",
+			input:    "GaussDB Kernel 505.2.1 build ff07bff6",
+			expected: "505.2.1",
 		},
 		{
-			input:    "PostgreSQL 9.5.4, compiled by Visual C++ build 1800, 64-bit",
-			expected: "9.5.4",
-		},
-		{
-			input:    "EnterpriseDB 9.6.5.10 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.4.7 20120313 (Red Hat 4.4.7-16), 64-bit",
-			expected: "9.6.5",
+			input:    "openGauss-lite 7.0.0-RC1 build 10d38387",
+			expected: "7.0.0",
 		},
 	}
 

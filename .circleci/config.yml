@@ -24,7 +24,7 @@ jobs:
   integration:
     docker:
     - image: cimg/go:1.24
-    - image: << parameters.postgres_image >>
+    - image: << parameters.gaussdb_image >>
       environment:
         POSTGRES_DB: circle_test
         POSTGRES_USER: gaussdb
@@ -57,13 +57,7 @@ workflows:
         matrix:
           parameters:
             gaussdb_image:
-            - circleci/postgres:11
-            - circleci/postgres:12
-            - circleci/postgres:13
-            - cimg/postgres:14.9
-            - cimg/postgres:15.4
-            - cimg/postgres:16.0
-            - cimg/postgres:17.0
+            - opengauss/opengauss:7.0.0-RC1.B023
     - prometheus/build:
         name: build
         parallelism: 3

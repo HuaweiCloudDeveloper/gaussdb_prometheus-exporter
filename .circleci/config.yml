@@ -26,9 +26,9 @@ jobs:
     - image: cimg/go:1.24
     - image: << parameters.gaussdb_image >>
       environment:
-        POSTGRES_DB: circle_test
-        POSTGRES_USER: gaussdb
-        POSTGRES_PASSWORD: test
+        GS_DB: circle_test
+        GS_USER: gaussdb
+        GS_PASSWORD: test
 
     parameters:
       gaussdb_image:

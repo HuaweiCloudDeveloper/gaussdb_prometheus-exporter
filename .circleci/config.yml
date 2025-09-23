@@ -77,7 +77,8 @@ workflows:
             only: /^v.*/
     - prometheus/publish_master:
         context: org-context
-        docker_hub_organization: prometheuscommunity
+        # docker_hub_organization: prometheuscommunity
+        docker_hub_organization: moseszane
         quay_io_organization: prometheuscommunity
         requires:
         - test

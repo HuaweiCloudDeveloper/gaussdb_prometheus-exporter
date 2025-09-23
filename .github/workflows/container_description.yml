@@ -26,8 +26,8 @@ jobs:
       - name: Push README to Dockerhub
         uses: christian-korneck/update-container-description-action@d36005551adeaba9698d8d67a296bd16fa91f8e8 # v1
         env:
-          DOCKER_USER: ${{ secrets.DOCKER_HUB_LOGIN }}
-          DOCKER_PASS: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          DOCKER_USER: ${{ secrets.DOCKER_LOGIN }}
+          DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
         with:
           destination_container_repo: ${{ env.DOCKER_REPO_NAME }}
           provider: dockerhub

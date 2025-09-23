@@ -78,7 +78,7 @@ workflows:
     - prometheus/publish_master:
         context: org-context
         # docker_hub_organization: prometheuscommunity
-        docker_hub_organization: moseszane
+        docker_hub_organization: moseszane168
         # quay_io_organization: prometheuscommunity
         quay_io_organization: moseszane168
         requires:
@@ -90,7 +90,7 @@ workflows:
     - prometheus/publish_release:
         context: org-context
         # docker_hub_organization: prometheuscommunity
-        docker_hub_organization: moseszane
+        docker_hub_organization: moseszane168
         # quay_io_organization: prometheuscommunity
         quay_io_organization: moseszane168
         requires:

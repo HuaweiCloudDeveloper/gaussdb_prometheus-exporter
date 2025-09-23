@@ -79,7 +79,8 @@ workflows:
         context: org-context
         # docker_hub_organization: prometheuscommunity
         docker_hub_organization: moseszane
-        quay_io_organization: prometheuscommunity
+        # quay_io_organization: prometheuscommunity
+        quay_io_organization: moseszane168
         requires:
         - test
         - build_all
@@ -90,7 +91,8 @@ workflows:
         context: org-context
         # docker_hub_organization: prometheuscommunity
         docker_hub_organization: moseszane
-        quay_io_organization: prometheuscommunity
+        # quay_io_organization: prometheuscommunity
+        quay_io_organization: moseszane168
         requires:
         - test
         - build_all

@@ -207,7 +207,7 @@ var (
 		[]string{"datid", "datname"},
 		prometheus.Labels{},
 	)
-	statDatabaseActiveTime = prometheus.NewDesc(prometheus.BuildFQName(
+	/*statDatabaseActiveTime = prometheus.NewDesc(prometheus.BuildFQName(
 		namespace,
 		statDatabaseSubsystem,
 		"active_time_seconds_total",
@@ -215,7 +215,7 @@ var (
 		"Time spent executing SQL statements in this database, in seconds",
 		[]string{"datid", "datname"},
 		prometheus.Labels{},
-	)
+	)*/
 )
 
 func statDatabaseQuery(columns []string) string {

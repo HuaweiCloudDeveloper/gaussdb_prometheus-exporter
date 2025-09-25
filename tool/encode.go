@@ -68,24 +68,6 @@ type timestampParser struct {
 	err error
 }
 
-func (p *timestampParser) mustAtoi(str string, begin int, end int) int {
-	if p.err != nil {
-		return 0
-	}
-	if begin < 0 || end < 0 || begin > end || end > len(str) {
-		p.err = errInvalidTimestamp
-		return 0
-	}
-	result, err := strconv.Atoi(str[begin:end])
-	if err != nil {
-		if p.err == nil {
-			p.err = fmt.Errorf("expected number; got '%v'", str)
-		}
-		return 0
-	}
-	return result
-}
-
 // The location cache caches the time zones typically used by the client.
 type locationCache struct {
 	cache map[int]*time.Location

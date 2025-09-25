@@ -19,7 +19,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"strconv"
-	"sync"
 	"time"
 
 	"github.com/HuaweiCloudDeveloper/gaussdb_prometheus-exporter/oid"
@@ -59,12 +58,6 @@ func encode(parameterStatus *parameterStatus, x interface{}, gstypOid oid.Oid) [
 	}
 
 	panic("not reached")
-}
-
-// The location cache caches the time zones typically used by the client.
-type locationCache struct {
-	cache map[int]*time.Location
-	lock  sync.Mutex
 }
 
 var infinityTsEnabled = false

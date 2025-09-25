@@ -17,7 +17,6 @@ import (
 	"bytes"
 	"database/sql/driver"
 	"encoding/hex"
-	"errors"
 	"fmt"
 	"strconv"
 	"sync"
@@ -61,8 +60,6 @@ func encode(parameterStatus *parameterStatus, x interface{}, gstypOid oid.Oid) [
 
 	panic("not reached")
 }
-
-var errInvalidTimestamp = errors.New("invalid timestamp")
 
 type timestampParser struct {
 	err error

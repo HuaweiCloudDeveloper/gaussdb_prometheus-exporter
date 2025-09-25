@@ -68,19 +68,6 @@ type timestampParser struct {
 	err error
 }
 
-func (p *timestampParser) expect(str string, char byte, pos int) {
-	if p.err != nil {
-		return
-	}
-	if pos+1 > len(str) {
-		p.err = errInvalidTimestamp
-		return
-	}
-	if c := str[pos]; c != char && p.err == nil {
-		p.err = fmt.Errorf("expected '%v' at position %v; got '%v'", char, pos, c)
-	}
-}
-
 func (p *timestampParser) mustAtoi(str string, begin int, end int) int {
 	if p.err != nil {
 		return 0

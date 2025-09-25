@@ -47,15 +47,6 @@ var time2400Regex = regexp.MustCompile(`^(24:00(?::00(?:\.0+)?)?)(?:[Z+-].*)?$`)
 const formatText format = 0
 const formatBinary format = 1
 
-func binaryEncode(parameterStatus *parameterStatus, x interface{}) []byte {
-	switch v := x.(type) {
-	case []byte:
-		return v
-	default:
-		return encode(parameterStatus, x, oid.T_unknown)
-	}
-}
-
 func encode(parameterStatus *parameterStatus, x interface{}, gstypOid oid.Oid) []byte {
 	switch v := x.(type) {
 	case int64:

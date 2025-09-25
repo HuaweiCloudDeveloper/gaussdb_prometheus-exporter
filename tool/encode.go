@@ -76,32 +76,6 @@ func encode(parameterStatus *parameterStatus, x interface{}, gstypOid oid.Oid) [
 	panic("not reached")
 }
 
-// appendEncodedText encodes item in text format as required by COPY
-// and appends to buf
-func appendEncodedText(parameterStatus *parameterStatus, buf []byte, x interface{}) []byte {
-	switch v := x.(type) {
-	case int64:
-		return strconv.AppendInt(buf, v, 10)
-	case float64:
-		return strconv.AppendFloat(buf, v, 'f', -1, 64)
-	case []byte:
-		encodedBytea := encodeBytea(parameterStatus.serverVersion, v)
-		return appendEscapedText(buf, string(encodedBytea))
-	case string:
-		return appendEscapedText(buf, v)
-	case bool:
-		return strconv.AppendBool(buf, v)
-	case time.Time:
-		return append(buf, formatTs(v)...)
-	case nil:
-		return append(buf, "\\N"...)
-	default:
-		errorf("encode: unknown type for %T", v)
-	}
-
-	panic("not reached")
-}
-
 func appendEscapedText(buf []byte, text string) []byte {
 	escapeNeeded := false
 	startPos := 0

@@ -185,13 +185,6 @@ func EnableInfinityTs(negative time.Time, positive time.Time) {
 	infinityTsPositive = positive
 }
 
-/*
- * Testing might want to toggle infinityTsEnabled
- */
-func disableInfinityTs() {
-	infinityTsEnabled = false
-}
-
 // This is a time function specific to the GaussDB default DateStyle
 // setting ("ISO, MDY"), the only one we currently support. This
 // accounts for the discrepancies between the parsing available with

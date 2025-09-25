@@ -17,13 +17,11 @@ import (
 	"fmt"
 	"math"
 	"net"
-	"net/url"
+	nurl "net/url"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
-
-	nurl "net/url"
 )
 
 // convert a string to the corresponding ColumnUsage
@@ -200,13 +198,13 @@ func parseFingerprint(url string) (string, error) {
 }
 
 func loggableDSN(dsn string) string {
-	pDSN, err := url.Parse(dsn)
+	pDSN, err := nurl.Parse(dsn)
 	if err != nil {
 		return "could not parse DATA_SOURCE_NAME"
 	}
 	// Blank user info if not nil
 	if pDSN.User != nil {
-		pDSN.User = url.UserPassword(pDSN.User.Username(), "PASSWORD_REMOVED")
+		pDSN.User = nurl.UserPassword(pDSN.User.Username(), "PASSWORD_REMOVED")
 	}
 
 	return pDSN.String()

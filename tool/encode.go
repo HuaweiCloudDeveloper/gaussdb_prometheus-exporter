@@ -76,46 +76,6 @@ func encode(parameterStatus *parameterStatus, x interface{}, gstypOid oid.Oid) [
 	panic("not reached")
 }
 
-func textDecode(parameterStatus *parameterStatus, s []byte, typ oid.Oid) interface{} {
-	switch typ {
-	case oid.T_char, oid.T_varchar, oid.T_text:
-		return string(s)
-	case oid.T_bytea:
-		b, err := parseBytea(s)
-		if err != nil {
-			errorf("%s", err)
-		}
-		return b
-	case oid.T_timestamptz:
-		return parseTs(parameterStatus.currentLocation, string(s))
-	case oid.T_timestamp, oid.T_date:
-		return parseTs(nil, string(s))
-	case oid.T_time:
-		return mustParse("15:04:05", typ, s)
-	case oid.T_timetz:
-		return mustParse("15:04:05-07", typ, s)
-	case oid.T_bool:
-		return s[0] == 't'
-	case oid.T_int8, oid.T_int4, oid.T_int2:
-		i, err := strconv.ParseInt(string(s), 10, 64)
-		if err != nil {
-			errorf("%s", err)
-		}
-		return i
-	case oid.T_float4, oid.T_float8:
-		// We always use 64 bit parsing, regardless of whether the input text is for
-		// a float4 or float8, because clients expect float64s for all float datatypes
-		// and returning a 32-bit parsed float64 produces lossy results.
-		f, err := strconv.ParseFloat(string(s), 64)
-		if err != nil {
-			errorf("%s", err)
-		}
-		return f
-	}
-
-	return s
-}
-
 // appendEncodedText encodes item in text format as required by COPY
 // and appends to buf
 func appendEncodedText(parameterStatus *parameterStatus, buf []byte, x interface{}) []byte {

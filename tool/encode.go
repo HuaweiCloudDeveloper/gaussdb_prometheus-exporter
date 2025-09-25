@@ -43,8 +43,6 @@ type format int
 
 var time2400Regex = regexp.MustCompile(`^(24:00(?::00(?:\.0+)?)?)(?:[Z+-].*)?$`)
 
-const formatText format = 0
-
 func encode(parameterStatus *parameterStatus, x interface{}, gstypOid oid.Oid) []byte {
 	switch v := x.(type) {
 	case int64:

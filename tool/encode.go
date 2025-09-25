@@ -74,12 +74,6 @@ type locationCache struct {
 	lock  sync.Mutex
 }
 
-// All connections share the same list of timezones. Benchmarking shows that
-// about 5% speed could be gained by putting the cache in the connection and
-// losing the mutex, at the cost of a small amount of memory and a somewhat
-// significant increase in code complexity.
-var globalLocationCache = newLocationCache()
-
 func newLocationCache() *locationCache {
 	return &locationCache{cache: make(map[int]*time.Location)}
 }

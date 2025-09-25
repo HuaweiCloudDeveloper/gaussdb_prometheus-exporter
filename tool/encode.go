@@ -77,6 +77,17 @@ func encode(parameterStatus *parameterStatus, x interface{}, gstypOid oid.Oid) [
 	panic("not reached")
 }
 
+func decode(parameterStatus *parameterStatus, s []byte, typ oid.Oid, f format) interface{} {
+	switch f {
+	case formatBinary:
+		return binaryDecode(parameterStatus, s, typ)
+	case formatText:
+		return textDecode(parameterStatus, s, typ)
+	default:
+		panic("not reached")
+	}
+}
+
 func binaryDecode(parameterStatus *parameterStatus, s []byte, typ oid.Oid) interface{} {
 	switch typ {
 	case oid.T_bytea:

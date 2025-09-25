@@ -74,21 +74,6 @@ type locationCache struct {
 	lock  sync.Mutex
 }
 
-// Returns the cached timezone for the specified offset, creating and caching
-// it if necessary.
-func (c *locationCache) getLocation(offset int) *time.Location {
-	c.lock.Lock()
-	defer c.lock.Unlock()
-
-	location, ok := c.cache[offset]
-	if !ok {
-		location = time.FixedZone("", offset)
-		c.cache[offset] = location
-	}
-
-	return location
-}
-
 var infinityTsEnabled = false
 var infinityTsNegative time.Time
 var infinityTsPositive time.Time

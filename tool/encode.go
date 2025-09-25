@@ -16,7 +16,6 @@ package tool
 import (
 	"bytes"
 	"database/sql/driver"
-	"encoding/binary"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -72,30 +71,6 @@ func encode(parameterStatus *parameterStatus, x interface{}, gstypOid oid.Oid) [
 
 	default:
 		errorf("encode: unknown type for %T", v)
-	}
-
-	panic("not reached")
-}
-
-func binaryDecode(parameterStatus *parameterStatus, s []byte, typ oid.Oid) interface{} {
-	switch typ {
-	case oid.T_bytea:
-		return s
-	case oid.T_int8:
-		return int64(binary.BigEndian.Uint64(s))
-	case oid.T_int4:
-		return int64(int32(binary.BigEndian.Uint32(s)))
-	case oid.T_int2:
-		return int64(int16(binary.BigEndian.Uint16(s)))
-	case oid.T_uuid:
-		b, err := decodeUUIDBinary(s)
-		if err != nil {
-			panic(err)
-		}
-		return b
-
-	default:
-		errorf("don't know how to decode binary parameter of type %d", uint32(typ))
 	}
 
 	panic("not reached")

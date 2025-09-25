@@ -61,10 +61,6 @@ func encode(parameterStatus *parameterStatus, x interface{}, gstypOid oid.Oid) [
 	panic("not reached")
 }
 
-type timestampParser struct {
-	err error
-}
-
 // The location cache caches the time zones typically used by the client.
 type locationCache struct {
 	cache map[int]*time.Location

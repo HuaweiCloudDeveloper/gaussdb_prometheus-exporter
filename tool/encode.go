@@ -74,10 +74,6 @@ type locationCache struct {
 	lock  sync.Mutex
 }
 
-func newLocationCache() *locationCache {
-	return &locationCache{cache: make(map[int]*time.Location)}
-}
-
 // Returns the cached timezone for the specified offset, creating and caching
 // it if necessary.
 func (c *locationCache) getLocation(offset int) *time.Location {

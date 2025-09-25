@@ -440,7 +440,7 @@ func (a GenericArray) scanBytes(src []byte, dv reflect.Value) error {
 
 	if len(dims) > 1 {
 		return fmt.Errorf("pq: scanning from multidimensional ARRAY%s is not implemented",
-			strings.Replace(fmt.Sprint(dims), " ", "][", -1))
+			strings.ReplaceAll(fmt.Sprint(dims), " ", "]["))
 	}
 
 	// Treat a zero-dimensional array like an array with a single dimension of zero.
@@ -454,7 +454,7 @@ func (a GenericArray) scanBytes(src []byte, dv reflect.Value) error {
 		case reflect.Array:
 			if rt.Len() != dims[i] {
 				return fmt.Errorf("pq: cannot convert ARRAY%s to %s",
-					strings.Replace(fmt.Sprint(dims), " ", "][", -1), dv.Type())
+					strings.ReplaceAll(fmt.Sprint(dims), " ", "]["), dv.Type())
 			}
 		default:
 			// TODO handle multidimensional
@@ -903,7 +903,7 @@ func scanLinearArray(src, del []byte, typ string) (elems [][]byte, err error) {
 		return nil, err
 	}
 	if len(dims) > 1 {
-		return nil, fmt.Errorf("pq: cannot convert ARRAY%s to %s", strings.Replace(fmt.Sprint(dims), " ", "][", -1), typ)
+		return nil, fmt.Errorf("pq: cannot convert ARRAY%s to %s", strings.ReplaceAll(fmt.Sprint(dims), " ", "]["), typ)
 	}
 	return elems, err
 }

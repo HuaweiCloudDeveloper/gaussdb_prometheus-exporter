@@ -66,7 +66,7 @@ func NewServer(dsn string, opts ...ServerOpt) (*Server, error) {
 
 	db, err := sql.Open("gaussdb", dsn)
 	if err != nil {
-		return nil, fmt.Errorf("Unable to create a GaussDB connection: %w", err)
+		return nil, fmt.Errorf("unable to create a GaussDB connection: %w", err)
 	}
 
 	db.SetMaxOpenConns(1)

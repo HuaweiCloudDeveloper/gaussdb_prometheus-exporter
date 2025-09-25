@@ -20,7 +20,6 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -40,8 +39,6 @@ type parameterStatus struct {
 }
 
 type format int
-
-var time2400Regex = regexp.MustCompile(`^(24:00(?::00(?:\.0+)?)?)(?:[Z+-].*)?$`)
 
 func encode(parameterStatus *parameterStatus, x interface{}, gstypOid oid.Oid) []byte {
 	switch v := x.(type) {

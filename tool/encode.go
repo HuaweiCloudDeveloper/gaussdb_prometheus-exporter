@@ -38,8 +38,6 @@ type parameterStatus struct {
 	currentLocation *time.Location
 }
 
-type format int
-
 func encode(parameterStatus *parameterStatus, x interface{}, gstypOid oid.Oid) []byte {
 	switch v := x.(type) {
 	case int64:

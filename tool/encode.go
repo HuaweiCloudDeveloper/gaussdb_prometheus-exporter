@@ -76,44 +76,6 @@ func encode(parameterStatus *parameterStatus, x interface{}, gstypOid oid.Oid) [
 	panic("not reached")
 }
 
-func appendEscapedText(buf []byte, text string) []byte {
-	escapeNeeded := false
-	startPos := 0
-	var c byte
-
-	// check if we need to escape
-	for i := 0; i < len(text); i++ {
-		c = text[i]
-		if c == '\\' || c == '\n' || c == '\r' || c == '\t' {
-			escapeNeeded = true
-			startPos = i
-			break
-		}
-	}
-	if !escapeNeeded {
-		return append(buf, text...)
-	}
-
-	// copy till first char to escape, iterate the rest
-	result := append(buf, text[:startPos]...)
-	for i := startPos; i < len(text); i++ {
-		c = text[i]
-		switch c {
-		case '\\':
-			result = append(result, '\\', '\\')
-		case '\n':
-			result = append(result, '\\', 'n')
-		case '\r':
-			result = append(result, '\\', 'r')
-		case '\t':
-			result = append(result, '\\', 't')
-		default:
-			result = append(result, c)
-		}
-	}
-	return result
-}
-
 func mustParse(f string, typ oid.Oid, s []byte) time.Time {
 	str := string(s)
 

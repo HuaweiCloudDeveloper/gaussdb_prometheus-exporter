@@ -185,30 +185,6 @@ func EnableInfinityTs(negative time.Time, positive time.Time) {
 	infinityTsPositive = positive
 }
 
-// This is a time function specific to the GaussDB default DateStyle
-// setting ("ISO, MDY"), the only one we currently support. This
-// accounts for the discrepancies between the parsing available with
-// time.Parse and the GaussDB date formatting quirks.
-func parseTs(currentLocation *time.Location, str string) interface{} {
-	switch str {
-	case "-infinity":
-		if infinityTsEnabled {
-			return infinityTsNegative
-		}
-		return []byte(str)
-	case "infinity":
-		if infinityTsEnabled {
-			return infinityTsPositive
-		}
-		return []byte(str)
-	}
-	t, err := ParseTimestamp(currentLocation, str)
-	if err != nil {
-		panic(err)
-	}
-	return t
-}
-
 // ParseTimestamp parses GaussDB' text format. It returns a time.Time in
 // currentLocation iff that time's offset agrees with the offset sent from the
 // GaussDB server. Otherwise, ParseTimestamp returns a time.Time with the

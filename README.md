@@ -8,6 +8,7 @@
 Prometheus exporter for GaussDB server metrics.
 
 CI Tested GaussDB versions: `505.2.1`.
+CI Tested openGauss versions: `7.0.0-RC1.B023`.
 
 ## Quick Start
 This package is available for Docker:
